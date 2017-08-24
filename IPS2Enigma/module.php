@@ -1467,7 +1467,7 @@
 	private function Get_Picons()
 	{
 		// Quelldatei
-		$FileName = IPS_GetKernelDir()."modules".DIRECTORY_SEPARATOR."SymconModules".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."Picons".DIRECTORY_SEPARATOR."Picons.zip";
+		$FileName = IPS_GetKernelDir()."modules".DIRECTORY_SEPARATOR."SymconModules".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."imgs".DIRECTORY_SEPARATOR."Picons.zip";
 		// Zielpfad
 		$WebfrontPath = IPS_GetKernelDir()."webfront".DIRECTORY_SEPARATOR."user".DIRECTORY_SEPARATOR;  
 		if (file_exists($FileName)) {
