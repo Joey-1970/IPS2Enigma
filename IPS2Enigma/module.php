@@ -677,6 +677,9 @@
 					//$sender = urlencode($sender);
 					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservice?sRef=".$e2servicereference));
 					$ValueCount = count($xmlResult) - 2;
+					If ($ValueCount <= 0) {
+						return;
+					}
 					$table = '<style type="text/css">';
 					$table .= '<link rel="stylesheet" href="./.../webfront.css">';
 					$table .= "</style>";
