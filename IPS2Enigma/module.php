@@ -7,7 +7,9 @@
         {
             	// Diese Zeile nicht löschen.
             	parent::Create();
-           	$this->RegisterPropertyBoolean("Open", false);
+           	$this->RegisterMessage(0, IPS_KERNELMESSAGE);
+		
+		$this->RegisterPropertyBoolean("Open", false);
 	    	$this->RegisterPropertyString("User", "User");
 	    	$this->RegisterPropertyString("Password", "Passwort");
 		$this->RegisterPropertyString("IPAddress", "127.0.0.1");
@@ -45,8 +47,10 @@
 		$this->RegisterProfileInteger("gigabyte.GB", "Gauge", "", " GB", 0, 1000000, 1);
 		
 		// Objekte und Hook anlegen
-		$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
-		$this->RegisterHook("/hook/IPS2Enigma");
+		if (IPS_GetKernelRunlevel() == KR_READY) {
+			$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
+			$this->RegisterHook("/hook/IPS2Enigma");
+		}
 		$this->SetBuffer("FirstUpdate", "false");
 		
 		$this->RegisterVariableInteger("PiconUpdate", "Picon Update", "~UnixTimestamp", 1500);
@@ -582,6 +586,17 @@
 	    	}
 	}
 	
+	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    	{
+		switch ($Message) {
+			case 10001:
+				$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
+				$this->RegisterHook("/hook/IPS2Enigma");
+				break;
+			
+		}
+    	}            
+	    
 	// Beginn der Funktionen
 	public function Get_DataUpdate()
 	{
@@ -1075,7 +1090,7 @@
 	{
 		
 		$result = GetValueBoolean($this->GetIDForIdent("powerstate"));
-		/*
+		
 		//$xmlResult = simplexml_load_file("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate");
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate"));
 		//$wert = $xml->e2instandby;
@@ -1088,9 +1103,10 @@
 			SetValueBoolean($this->GetIDForIdent("powerstate"), false);
 			$result = false;
 		}
-		*/
+		
 	return $result;
 	}
+	    
 	public function ToggleStandby()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
@@ -1341,27 +1357,28 @@
 	return $Result;
 	}
 	    
-	private function RegisterHook($WebHook) 
-	{ 
-		$ids = IPS_GetInstanceListByModuleID("{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}"); 
-		if(sizeof($ids) > 0) { 
-			$hooks = json_decode(IPS_GetProperty($ids[0], "Hooks"), true); 
-			$found = false; 
-			foreach($hooks as $index => $hook) { 
-				if($hook['Hook'] == $WebHook) { 
-					if($hook['TargetID'] == $this->InstanceID) 
-						return; 
-					$hooks[$index]['TargetID'] = $this->InstanceID; 
-					$found = true; 
-				} 
-			} 
-			if(!$found) { 
-				$hooks[] = Array("Hook" => $WebHook, "TargetID" => $this->InstanceID); 
-			} 
-			IPS_SetProperty($ids[0], "Hooks", json_encode($hooks)); 
-			IPS_ApplyChanges($ids[0]); 
-		} 
-	} 
+	private function RegisterHook($WebHook)
+    	{
+        	$ids = IPS_GetInstanceListByModuleID('{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}');
+        	if (count($ids) > 0) {
+            		$hooks = json_decode(IPS_GetProperty($ids[0], 'Hooks'), true);
+            		$found = false;
+            		foreach ($hooks as $index => $hook) {
+                		if ($hook['Hook'] == $WebHook) {
+                    			if ($hook['TargetID'] == $this->InstanceID) {
+                        			return;
+                    			}
+                    			$hooks[$index]['TargetID'] = $this->InstanceID;
+                    			$found = true;
+                		}
+            		}
+            		if (!$found) {
+                		$hooks[] = ['Hook' => $WebHook, 'TargetID' => $this->InstanceID];
+            		}
+            		IPS_SetProperty($ids[0], 'Hooks', json_encode($hooks));
+            		IPS_ApplyChanges($ids[0]);
+		}
+        }
 	
 	protected function ProcessHookData() 
 	{		
