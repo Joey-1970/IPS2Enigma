@@ -601,11 +601,12 @@
 	public function Get_DataUpdate()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND (GetValueBoolean($this->GetIDForIdent("powerstate")) == true)) {
+			$this->SendDebug("Get_DataUpdate", "Ausfuehrung", 0);
 			$this->SetBuffer("FirstUpdate", "false");
 			//IPS_LogMessage("IPS2Enigma","TV-Daten ermitteln");
 			// das aktuelle Programm
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
-       			If ($xmlResult == false) {
+       			If ($xmlResult === false) {
 				$this->SendDebug("Get_DataUpdate", "Fehler beim Lesen der Daten!", 0);
 				return;
 			}
@@ -669,6 +670,7 @@
 	public function Get_EPGUpdate()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			$this->SendDebug("Get_EPGUpdate", "Ausfuehrung", 0);
 			$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 			$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
@@ -899,6 +901,7 @@
 	// Ermittlung der Basisdaten
 	private function Get_BasicData()
 	{
+		$this->SendDebug("Get_BasicData", "Ausfuehrung", 0);
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/deviceinfo"));
 		If ($xmlResult === false) {
 			$this->SendDebug("Get_BasicData", "Fehler beim Lesen der Basisdaten!", 0);
@@ -945,6 +948,7 @@
 	public function GetStatusInfo()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			$this->SendDebug("GetStatusInfo", "Ausfuehrung", 0);
 			$JSONString = file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/api/statusinfo?");
 			If ($JSONString == false) {
 				$this->SendDebug("GetStatusInfo", "Fehler beim Lesen der Statusinformationen!", 0);
@@ -1013,6 +1017,7 @@
 	
 	private function GetMovieListUpdate()
 	{
+		$this->SendDebug("GetMovieListUpdate", "Ausfuehrung", 0);
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 		$FilePathDelete = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Delete_32.png";
@@ -1058,6 +1063,7 @@
 	    
 	private function GetEPGNowNextData()
 	{
+		$this->SendDebug("GetEPGNowNextData", "Ausfuehrung", 0);
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
@@ -1116,7 +1122,7 @@
 	    
 	private function Get_Powerstate()
 	{
-		
+		$this->SendDebug("Get_Powerstate", "Ausfuehrung", 0);
 		$result = GetValueBoolean($this->GetIDForIdent("powerstate"));
 		
 		//$xmlResult = simplexml_load_file("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate");
