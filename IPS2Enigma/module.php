@@ -672,7 +672,7 @@
 			$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 			$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
-			If ($xmlResult == false) {
+			If ($xmlResult === false) {
 				$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
 				return;
 			}
@@ -684,6 +684,10 @@
 			
 			If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
 				$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+				If ($xmlResult === false) {
+					$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+					return;
+				}
 				$e2servicereference = (string)$xmlResult->e2service->e2servicereference;
 				$e2servicename = (string)$xmlResult->e2service->e2servicename;
 				
@@ -691,6 +695,10 @@
 					
 					//$sender = urlencode($sender);
 					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservice?sRef=".$e2servicereference));
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+						return;
+					}
 					$ValueCount = count($xmlResult) - 2;
 					If ($ValueCount <= 0) {
 						return;
@@ -734,6 +742,10 @@
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) AND ($this->ReadPropertyBoolean("EPGnext_Data") == false) AND (substr($e2servicereference, 0, 20) <> "1:0:0:0:0:0:0:0:0:0:")) {
 					// das aktuelle Ereignis
 					$xmlResult =  new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenow?sRef=".$e2servicereference));
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+						return;
+					}
 					SetValueString($this->GetIDForIdent("e2eventtitle"), (string)utf8_decode($xmlResult->e2event->e2eventtitle));
 					SetValueString($this->GetIDForIdent("e2eventdescription"), (string)utf8_decode($xmlResult->e2event->e2eventdescription));
 					SetValueString($this->GetIDForIdent("e2eventdescriptionextended"), (string)utf8_decode($xmlResult->e2event->e2eventdescriptionextended));
@@ -771,6 +783,10 @@
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == false) AND ($this->ReadPropertyBoolean("EPGnext_Data") == true) AND (substr($e2servicereference, 0, 20) <> "1:0:0:0:0:0:0:0:0:0:")) {
 					// das folgende Ereignis
 					$xmlResult =  new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenext?sRef=".$e2servicereference));
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+						return;
+					}
 					SetValueString($this->GetIDForIdent("e2nexteventtitle"), (string)utf8_decode($xmlResult->e2event->e2eventtitle));
 					SetValueString($this->GetIDForIdent("e2nexteventdescription"), (string)utf8_decode($xmlResult->e2event->e2eventdescription));
 					SetValueString($this->GetIDForIdent("e2nexteventdescriptionextended"), (string)utf8_decode($xmlResult->e2event->e2eventdescriptionextended));
@@ -805,6 +821,10 @@
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) AND ($this->ReadPropertyBoolean("EPGnext_Data") == true) AND (substr($e2servicereference, 0, 20) <> "1:0:0:0:0:0:0:0:0:0:")) {
 					// das aktuelle Ereignis
 					$xmlResult =  new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenow?sRef=".$e2servicereference));
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+						return;
+					}
 					SetValueString($this->GetIDForIdent("e2eventtitle"), (string)utf8_decode($xmlResult->e2event->e2eventtitle));
 					SetValueString($this->GetIDForIdent("e2eventdescription"), (string)utf8_decode($xmlResult->e2event->e2eventdescription));
 					SetValueString($this->GetIDForIdent("e2eventdescriptionextended"), (string)utf8_decode($xmlResult->e2event->e2eventdescriptionextended));
@@ -816,6 +836,10 @@
 					SetValueInteger($this->GetIDForIdent("e2eventprogress"), GetValueInteger($this->GetIDForIdent("e2eventpast")) / GetValueInteger($this->GetIDForIdent("e2eventduration")) * 100);
 					// das folgende Ereignis
 					$xmlResult_2 =  new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenext?sRef=".$e2servicereference));
+					If ($xmlResult_2 === false) {
+						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+						return;
+					}
 					SetValueString($this->GetIDForIdent("e2nexteventtitle"), (string)utf8_decode($xmlResult_2->e2event->e2eventtitle));
 					SetValueString($this->GetIDForIdent("e2nexteventdescription"), (string)utf8_decode($xmlResult_2->e2event->e2eventdescription));
 					SetValueString($this->GetIDForIdent("e2nexteventdescriptionextended"), (string)utf8_decode($xmlResult_2->e2event->e2eventdescriptionextended));
@@ -876,7 +900,7 @@
 	private function Get_BasicData()
 	{
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/deviceinfo"));
-		If ($xmlResult == false) {
+		If ($xmlResult === false) {
 			$this->SendDebug("Get_BasicData", "Fehler beim Lesen der Basisdaten!", 0);
 			return;
 		}
@@ -993,7 +1017,7 @@
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 		$FilePathDelete = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Delete_32.png";
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/movielist"));
-		If ($xmlResult == false) {
+		If ($xmlResult === false) {
 			$this->SendDebug("GetMovieListUpdate", "Fehler beim Lesen der Daten!", 0);
 			return;
 		}
@@ -1037,12 +1061,16 @@
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
-		If ($xmlResult == false) {
+		If ($xmlResult === false) {
 			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der Daten!", 0);
 			return;
 		}
 		$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/epgnownext?bRef=".urlencode($bouquet)));
+		If ($xmlResult === false) {
+			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der Daten!", 0);
+			return;
+		}
 		$table = '<style type="text/css">';
 		$table .= '<link rel="stylesheet" href="./.../webfront.css">';
 		$table .= "</style>";
@@ -1093,6 +1121,10 @@
 		
 		//$xmlResult = simplexml_load_file("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate");
 		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate"));
+		If ($xmlResult === false) {
+			$this->SendDebug("Get_Powerstate", "Fehler beim Lesen der Daten!", 0);
+			return;
+		}
 		//$wert = $xml->e2instandby;
 		If(strpos((string)$xmlResult->e2instandby, "false")!== false) {
 			// Bei "false" ist die Box eingeschaltet
@@ -1111,7 +1143,7 @@
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=0"));
-			If ($xmlResult == false) {
+			If ($xmlResult === false) {
 				$this->SendDebug("ToggleStandby", "Fehler beim Setzen der Daten!", 0);
 				return;
 			}
@@ -1129,7 +1161,7 @@
 	{
 	      If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=1"));
-		      	If ($xmlResult == false) {
+		      	If ($xmlResult === false) {
 				$this->SendDebug("DeepStandby", "Fehler beim Setzen der Daten!", 0);
 				return;
 			}
@@ -1140,7 +1172,7 @@
 	{
 	       If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			$xmlResult = new SimpleXMLElement(file_get_contents("http:///".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=5"));
-		       	If ($xmlResult == false) {
+		       	If ($xmlResult === false) {
 				$this->SendDebug("Standby", "Fehler beim Setzen der Daten!", 0);
 				return;
 			}
