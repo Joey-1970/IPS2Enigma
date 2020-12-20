@@ -973,15 +973,29 @@
 			
 			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) == true) {
 				// Der aktuelle Programm-Name
-				If (strval($data->currservice_station) <> GetValueString($this->GetIDForIdent("e2servicename")) ) {
-					SetValueString($this->GetIDForIdent("e2servicename"), strval($data->currservice_station));
-					
+				If (isset($data->currservice_station) ) {
+					If (strval($data->currservice_station) <> GetValueString($this->GetIDForIdent("e2servicename")) ) {
+						SetValueString($this->GetIDForIdent("e2servicename"), strval($data->currservice_station));
+
+					}
+				}
+				else {
+					If (GetValueString($this->GetIDForIdent("e2servicename")) <> "unbekannt") {
+						SetValueString($this->GetIDForIdent("e2servicename"), "unbekannt");
+					}
 				}
 				// Der aktuelle Service-Referenz
-				If (strval($data->currservice_serviceref) <> GetValueString($this->GetIDForIdent("currservice_serviceref")) ) {
-					SetValueString($this->GetIDForIdent("currservice_serviceref"), strval($data->currservice_serviceref));
-					If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
-						$this->GetEPGNowNextData();
+				If (isset($data->currservice_serviceref) ) {
+					If (strval($data->currservice_serviceref) <> GetValueString($this->GetIDForIdent("currservice_serviceref")) ) {
+						SetValueString($this->GetIDForIdent("currservice_serviceref"), strval($data->currservice_serviceref));
+						If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
+							$this->GetEPGNowNextData();
+						}
+					}
+				}
+				else {
+					If (GetValueString($this->GetIDForIdent("currservice_serviceref")) <> "") {
+						SetValueString($this->GetIDForIdent("currservice_serviceref"), "");
 					}
 				}
 				// Signalstärke
