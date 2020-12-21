@@ -999,10 +999,15 @@
 		If ($this->ReadPropertyBoolean("Network_Data") == true) {
 			$this->SetValue("e2lanname", (string)$xmlResult->e2network->e2interface->e2name);
 			$this->SetValue("e2lanmac", (string)$xmlResult->e2network->e2interface->e2mac);
-			$this->SetValue("e2landhcp", (bool)$xmlResult->e2network->e2interface->e2dhcp);
+			If ((string)$xmlResult->e2network->e2interface->e2dhcp == "False") {
+				$this->SetValue("e2landhcp", false);
+			}
+			else {
+				$this->SetValue("e2landhcp", true);
+			}
 			$this->SetValue("e2lanip", (string)$xmlResult->e2network->e2interface->e2ip);
 			$this->SetValue("e2lanmask", (string)$xmlResult->e2network->e2interface->e2netmask);
-			$this->SetValue("e2langw", (string)$xmlResult->e2network->e2interface->e2getway);
+			$this->SetValue("e2langw", (string)$xmlResult->e2network->e2interface->e2gateway);
 		}
 		
 		If ($this->ReadPropertyBoolean("HDD_Data") == true) {
