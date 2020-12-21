@@ -44,7 +44,7 @@
 		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
 		
 		$arrayElements = array(); 
-		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Open", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
  		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Daten zum Enigma2-FTP Zugang (optional)");
@@ -52,6 +52,10 @@
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus Daten-Update in Sekunden (0 -> aus 1 -> Minimum)");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "DataUpdate", "caption" => "Daten Update (sek)");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Enigma2_Data", "caption" => "Enigma2 Daten anzeigen"); 
+		$arrayElements[] = array("type" => "CheckBox", "name" => "HDD_Data", "caption" => "HDD Daten anzeigen");
 		
 		
 		$arraySort = array();
