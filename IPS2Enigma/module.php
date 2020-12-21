@@ -72,7 +72,7 @@
 		}
 		else {
 			$arrayOptions = array();
-			foreach ($Bouquets as $Key->$Value) {
+			foreach ($Bouquets as $Key => $Value) {
 			   	$arrayOptions[] = array("label" => $Value, "value" => $Key);
 			}
 			$arrayElements[] = array("type" => "Select", "name" => "BouquetsNumber", "caption" => "Bouquets", "options" => $arrayOptions );	
