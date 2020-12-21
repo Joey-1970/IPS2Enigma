@@ -147,24 +147,17 @@
 		$this->DisableAction("e2tunerinfo");
 		
 		If ($this->ReadPropertyBoolean("Network_Data") == true) {
+			$this->RegisterVariableString("e2lanname", "Schnittstelle", "", 69);
 			$this->RegisterVariableString("e2lanmac", "MAC", "", 70);
-			$this->DisableAction("e2lanmac");
 			$this->RegisterVariableBoolean("e2landhcp", "DHCP", "", 71);
-			$this->DisableAction("e2landhcp");
 			$this->RegisterVariableString("e2lanip", "IP", "", 72);
-			$this->DisableAction("e2lanip");
 			$this->RegisterVariableString("e2lanmask", "Mask", "", 73);
-			$this->DisableAction("e2lanmask");
 			$this->RegisterVariableString("e2langw", "Gateway", "", 74);
-			$this->DisableAction("e2langw");
 		}
 		If ($this->ReadPropertyBoolean("HDD_Data") == true) {
 			$this->RegisterVariableString("e2hddinfo_model", "HDD Model", "", 80);
-			$this->DisableAction("e2hddinfo_model");
 			$this->RegisterVariableInteger("e2hddinfo_capacity", "HDD Capacity", "gigabyte.GB", 90);
-			$this->DisableAction("e2hddinfo_capacity");
 			$this->RegisterVariableInteger("e2hddinfo_free", "HDD Free", "gigabyte.GB", 95);
-			$this->DisableAction("e2hddinfo_free");
 		}
 		
 		// Daten aus der Status-Funktion
@@ -1004,11 +997,12 @@
 		SetValueString($this->GetIDForIdent("e2tunerinfo"), $table);
 		
 		If ($this->ReadPropertyBoolean("Network_Data") == true) {
-			SetValueString($this->GetIDForIdent("e2lanmac"), (string)$xmlResult->e2network->e2lanmac);
-			SetValueBoolean($this->GetIDForIdent("e2landhcp"), (bool)$xmlResult->e2network->e2landhcp);
-			SetValueString($this->GetIDForIdent("e2lanip"), (string)$xmlResult->e2network->e2lanip);
-			SetValueString($this->GetIDForIdent("e2lanmask"), (string)$xmlResult->e2network->e2lanmask);
-			SetValueString($this->GetIDForIdent("e2langw"), (string)$xmlResult->e2network->e2langw);
+			$this->SetValue("e2lanname", (string)$xmlResult->e2network->e2interface->e2name);
+			$this->SetValue("e2lanmac", (string)$xmlResult->e2network->e2interface->e2mac);
+			$this->SetValue("e2landhcp", (bool)$xmlResult->e2network->e2interface->e2dhcp);
+			$this->SetValue("e2lanip", (string)$xmlResult->e2network->e2interface->e2ip);
+			$this->SetValue("e2lanmask", (string)$xmlResult->e2network->e2interface->e2netmask);
+			$this->SetValue("e2langw", (string)$xmlResult->e2network->e2interface->e2getway);
 		}
 		
 		If ($this->ReadPropertyBoolean("HDD_Data") == true) {
