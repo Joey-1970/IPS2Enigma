@@ -56,7 +56,13 @@
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Enigma2_Data", "caption" => "Enigma2 Daten anzeigen"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "HDD_Data", "caption" => "HDD Daten anzeigen");
-		
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Network_Data", "caption" => "Netzwerk Daten anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Signal_Data", "caption" => "Empfangssignal Daten anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "RC_Data", "caption" => "Virtuelle Fernbedienung erstellen");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus EPG-Update in Sekunden (0 -> aus 15 -> Minimum) (HTML)");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "EPGUpdate", "caption" => "EPG Update (sek)");
 		
 		$arraySort = array();
 		$arraySort = array("column" => "RadioStationName", "direction" => "ascending");
