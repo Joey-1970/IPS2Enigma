@@ -66,7 +66,7 @@
 		$arrayElements[] = array("type" => "Label", "caption" => "Bei mehreren eingerichteten Bouquets muss hier eine Vorauswahl getroffen werden.");
 		
 		$BouquetsArray = array();
-		$Bouquets = GetBouquetsInformation();
+		$Bouquets = $this->GetBouquetsInformation();
 		If ($Bouquets === false) {
 			$arrayElements[] = array("type" => "Label", "caption" => "Es wurden keine Bouquets gefunden oder die Abfrage war fehlerhaft!");
 		}
