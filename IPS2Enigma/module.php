@@ -63,7 +63,21 @@
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus EPG-Update in Sekunden (0 -> aus 15 -> Minimum) (HTML)");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "EPGUpdate", "caption" => "EPG Update (sek)");
+		$arrayElements[] = array("type" => "Label", "caption" => "Bei mehreren eingerichteten Bouquets muss hier eine Vorauswahl getroffen werden.");
 		
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "BouquetsNumber",  "caption" => "Bouquet Nummer"); 		
+		
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnow_Data", "caption" => "EPG des aktuellen Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)"); 
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnext_Data", "caption" => "EPG des folgenden Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data", "caption" => "EPG des aktuellen und der folgenden Programms des aktuellen Senders anzeigen (HTML)");		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Quelle der für die HTML-Aufbereitung genutzten Picons:");
+		$arrayElements[] = array("type" => "Label", "caption" => "(Voraussetzungen: FTP-Zugang zum Receiver und dort installierte Picons)");
+		
+
+
+
 		$arraySort = array();
 		$arraySort = array("column" => "RadioStationName", "direction" => "ascending");
 		
