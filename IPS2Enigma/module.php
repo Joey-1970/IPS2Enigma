@@ -211,23 +211,17 @@
 		
 		If (($this->ReadPropertyBoolean("EPGnow_Data") == true) OR ($this->ReadPropertyBoolean("EPGnext_Data") == true)) {
 			$this->RegisterVariableString("e2epgHTML", "EPG", "~HTMLBox", 257);
-			$this->DisableAction("e2epgHTML");
 		}
 		
 		If ($this->ReadPropertyBoolean("Movielist_Data") == true) {
 			$this->RegisterVariableString("e2movielist", "Aufzeichnungen", "~HTMLBox", 260);
-			$this->DisableAction("e2movielist");
 		}
 		
 		If ($this->ReadPropertyBoolean("Signal_Data") == true) {
 			$this->RegisterVariableInteger("e2snrdb", "Signal-to-Noise Ratio (dB)", "snr.db", 300);
-			$this->DisableAction("e2snrdb");
 			$this->RegisterVariableInteger("e2snr", "Signal-to-Noise Ratio", "~Intensity.100", 310);
-			$this->DisableAction("e2snr");
 			$this->RegisterVariableInteger("e2ber", "Bit error rate", "", 320);
-			$this->DisableAction("e2ber");
 			$this->RegisterVariableInteger("e2agc", "Automatic Gain Control", "~Intensity.100", 330);
-			$this->DisableAction("e2agc");
 		}
 		
 		//$this->RegisterVariableString("e2stream", "Stream-Video", "~HTMLBox", 900);
