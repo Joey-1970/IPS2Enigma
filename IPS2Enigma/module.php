@@ -74,27 +74,20 @@
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Quelle der für die HTML-Aufbereitung genutzten Picons:");
 		$arrayElements[] = array("type" => "Label", "caption" => "(Voraussetzungen: FTP-Zugang zum Receiver und dort installierte Picons)");
-		
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "PHP-Modul", "value" => 0);
+		$arrayOptions[] = array("label" => "Enigma-Receiver", "value" => 1);
+		$arrayElements[] = array("type" => "Select", "name" => "PiconSource", "caption" => "Picon Quelle", "options" => $arrayOptions );		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Screenshot-Update in Sekunden (0 -> aus, 5 sek -> Minimum)");
+		$arrayElements[] = array("type" => "IntervalBox", "name" => "ScreenshotUpdate", "caption" => "Screenshot-Update (sek)");
+		$arrayOptions = array();
+		$arrayOptions[] = array("label" => "640 px", "value" => 640);
+		$arrayOptions[] = array("label" => "860 px", "value" => 860);
+		$arrayOptions[] = array("label" => "1920 px", "value" => 1920);
+		$arrayElements[] = array("type" => "Select", "name" => "Screenshot", "caption" => "Screenshot Grösse", "options" => $arrayOptions );		
 
-
-
-		$arraySort = array();
-		$arraySort = array("column" => "RadioStationName", "direction" => "ascending");
-		
-		$arrayEditName = array();
-		$arrayEditName = array("type" => "ValidationTextBox");
-		
-		$arrayEditFrequency = array();
-		$arrayEditFrequency = array("type" => "NumberSpinner", "minimum" => 87.5, "maximum" => 108.0, "digits" => 1);
-		
-		$arrayColumns = array();
-		$arrayColumns[] = array("label" => "Stationsname", "name" => "RadioStationName", "width" => "300px", "add" => "Radio GaGa", "edit" => $arrayEditName);
-		$arrayColumns[] = array("label" => "Frequenz", "name" => "RadioStationFrequency", "width" => "200px", "add" => "87.5", "edit" => $arrayEditFrequency, "align" => "right");
-		
-		$arrayElements[] = array("type" => "List", "name" => "RadioStations", "rowCount" => 10, "add" => true, "delete" => true, "sort" => $arraySort, "columns" => $arrayColumns);
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");		
-		
-		
 		
 		$arrayElements[] = array("type" => "Label", "caption" => "Test Center"); 
 		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
