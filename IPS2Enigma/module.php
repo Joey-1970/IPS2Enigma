@@ -34,7 +34,7 @@
 		$this->RegisterTimer("ScreenshotUpdate", 0, 'Enigma_GetScreenshot($_IPS["TARGET"]);');
 		$this->RegisterTimer("StatusInfo", 0, 'Enigma_GetStatusInfo($_IPS["TARGET"]);');
 	}
-        /*
+	    
 	public function GetConfigurationForm() { 
 		$arrayStatus = array(); 
 		$arrayStatus[] = array("code" => 101, "icon" => "inactive", "caption" => "Instanz wird erstellt"); 
@@ -65,8 +65,18 @@
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "EPGUpdate", "caption" => "EPG Update (sek)");
 		$arrayElements[] = array("type" => "Label", "caption" => "Bei mehreren eingerichteten Bouquets muss hier eine Vorauswahl getroffen werden.");
 		
-		$arrayElements[] = array("type" => "NumberSpinner", "name" => "BouquetsNumber",  "caption" => "Bouquet Nummer"); 		
-		
+		$BouquetsArray = array();
+		$Bouquets = GetBouquetsInformation();
+		If ($Bouquets === false) {
+			$arrayElements[] = array("type" => "Label", "caption" => "Es wurden keine Bouquets gefunden oder die Abfrage war fehlerhaft!");
+		}
+		else {
+			$arrayOptions = array();
+			foreach ($Bouquets as $Key->$Value) {
+			   	$arrayOptions[] = array("label" => $Value, "value" => $Key);
+			}
+			$arrayElements[] = array("type" => "Select", "name" => "BouquetsNumber", "caption" => "Bouquets", "options" => $arrayOptions );	
+		}
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnow_Data", "caption" => "EPG des aktuellen Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnext_Data", "caption" => "EPG des folgenden Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
@@ -94,8 +104,7 @@
 			
 		
 		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
- 	}     
-	*/    
+ 	}        
 	    
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
         public function ApplyChanges() 
@@ -1473,6 +1482,30 @@
 		}
 	return $Result;
 	}
+	
+	public function GetBouquetsInformation()
+	{
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			$Result = false;
+			
+			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
+			If ($xmlResult === false) {
+				$this->SendDebug("GetBouquetsInformation", "Fehler beim Lesen der Daten!", 0);
+				return $Result;
+			}
+			
+			If (count($xmlResult->e2service) == 0) {
+				Echo "Es wurde nur kein Bouquet gefunden, bitte auf dem Receiver mindestens eines einrichten";
+			}
+			else {
+				$Result = array();
+				for ($i = 0; $i <= count($xmlResult->e2service) - 1; $i++) {
+					$Result[$i] = $xmlResult->e2service[$i]->e2servicename;
+				}
+			}
+		}
+	return $Result;
+	}    
 	    
 	private function RegisterHook($WebHook)
     	{
