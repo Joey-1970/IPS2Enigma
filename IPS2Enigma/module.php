@@ -34,7 +34,52 @@
 		$this->RegisterTimer("ScreenshotUpdate", 0, 'Enigma_GetScreenshot($_IPS["TARGET"]);');
 		$this->RegisterTimer("StatusInfo", 0, 'Enigma_GetStatusInfo($_IPS["TARGET"]);');
 	}
-        
+        /*
+	public function GetConfigurationForm() { 
+		$arrayStatus = array(); 
+		$arrayStatus[] = array("code" => 101, "icon" => "inactive", "caption" => "Instanz wird erstellt"); 
+		$arrayStatus[] = array("code" => 102, "icon" => "active", "caption" => "Instanz ist aktiv");
+		$arrayStatus[] = array("code" => 104, "icon" => "inactive", "caption" => "Instanz ist inaktiv");
+		$arrayStatus[] = array("code" => 200, "icon" => "error", "caption" => "Instanz ist fehlerhaft"); 
+		$arrayStatus[] = array("code" => 202, "icon" => "error", "caption" => "Kommunikationfehler!");
+		
+		$arrayElements = array(); 
+		$arrayElements[] = array("name" => "Open", "type" => "CheckBox",  "caption" => "Aktiv"); 
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
+ 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Daten zum Enigma2-FTP Zugang (optional)");
+		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
+		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus Daten-Update in Sekunden (0 -> aus 1 -> Minimum)");
+		
+		
+		$arraySort = array();
+		$arraySort = array("column" => "RadioStationName", "direction" => "ascending");
+		
+		$arrayEditName = array();
+		$arrayEditName = array("type" => "ValidationTextBox");
+		
+		$arrayEditFrequency = array();
+		$arrayEditFrequency = array("type" => "NumberSpinner", "minimum" => 87.5, "maximum" => 108.0, "digits" => 1);
+		
+		$arrayColumns = array();
+		$arrayColumns[] = array("label" => "Stationsname", "name" => "RadioStationName", "width" => "300px", "add" => "Radio GaGa", "edit" => $arrayEditName);
+		$arrayColumns[] = array("label" => "Frequenz", "name" => "RadioStationFrequency", "width" => "200px", "add" => "87.5", "edit" => $arrayEditFrequency, "align" => "right");
+		
+		$arrayElements[] = array("type" => "List", "name" => "RadioStations", "rowCount" => 10, "add" => true, "delete" => true, "sort" => $arraySort, "columns" => $arrayColumns);
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");		
+		
+		
+		
+		$arrayElements[] = array("type" => "Label", "caption" => "Test Center"); 
+		$arrayElements[] = array("type" => "TestCenter", "name" => "TestCenter");
+			
+		
+		return JSON_encode(array("status" => $arrayStatus, "elements" => $arrayElements)); 		 
+ 	}     
+	*/    
+	    
 	// Überschreibt die intere IPS_ApplyChanges($id) Funktion
         public function ApplyChanges() 
         {
