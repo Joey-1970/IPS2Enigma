@@ -1500,7 +1500,7 @@
 			else {
 				$Result = array();
 				for ($i = 0; $i <= count($xmlResult->e2service) - 1; $i++) {
-					$Result[$i] = $xmlResult->e2service[$i]->e2servicename;
+					$Result[$i] = (string)$xmlResult->e2service[$i]->e2servicename;
 				}
 			}
 		}
