@@ -1417,7 +1417,9 @@
 			//IPS_LogMessage("IPS2Enigma Netzanbindung","Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert");
 			$status = @fsockopen($this->ReadPropertyString("IPAddress"), 80, $errno, $errstr, 10);
 				if (!$status) {
-					IPS_LogMessage("IPS2Enigma Netzanbindung","Port ist geschlossen!");				
+					$this->SendDebug("ConnectionTest", "Port ist geschlossen!", 0);
+					IPS_LogMessage("IPS2Enigma Netzanbindung","Port ist geschlossen!");
+					$this->SetStatus(202);
 	   			}
 	   			else {
 	   				fclose($status);
@@ -1427,8 +1429,9 @@
 	   			}
 		}
 		else {
+			$this->SendDebug("ConnectionTest", "IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!", 0);
 			IPS_LogMessage("IPS2Enigma","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
-			$this->SetStatus(104);
+			$this->SetStatus(202);
 		}
 	return $result;
 	}
