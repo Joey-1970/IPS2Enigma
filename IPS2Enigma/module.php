@@ -1110,7 +1110,7 @@
 		$table .= "</style>";
 		$table .= '<table class="tg">';
 		$table .= "<tr>";
-		$table .= '<th class="tg-kv4b">Titel</th>';
+		$table .= '<th class="tg-kv4b" align="left" width=150 >Titel</th>';
 		$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
 		$table .= '<th class="tg-kv4b">Langbeschreibung<br></th>';
 		$table .= '<th class="tg-kv4b">Quelle</th>';
