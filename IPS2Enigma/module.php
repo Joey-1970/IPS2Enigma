@@ -1624,6 +1624,7 @@
 	public function Get_Picons_Enigma()
 	{
 	        $PiconUpdate = $this->ReadPropertyBoolean("PiconUpdate");
+		$result = false;
 		If ($PiconUpdate == true) {
 			If (($this->ReadPropertyBoolean("Open") == true) ) {
 				// Prüfen, ob das Verzeichnis schon existiert
