@@ -768,7 +768,7 @@
 					$table .= "</style>";
 					$table .= '<table class="tg">';
 					$table .= "<tr>";
-					$table .= '<th class="tg-kv4b" align="left" width=100 >Sender</th>';
+					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 					$table .= '<th class="tg-kv4b">Beginn<br></th>';
 					$table .= '<th class="tg-kv4b">Titel</th>';
 					$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
@@ -820,7 +820,7 @@
 					$table .= "</style>";
 					$table .= '<table class="tg">';
 					$table .= "<tr>";
-					$table .= '<th class="tg-kv4b">Sender</th>';
+					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 					$table .= '<th class="tg-kv4b">Titel</th>';
 					$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
 					$table .= '<th class="tg-kv4b">Langbeschreibung<br></th>';
@@ -858,7 +858,7 @@
 					$table .= "</style>";
 					$table .= '<table class="tg">';
 					$table .= "<tr>";
-					$table .= '<th class="tg-kv4b">Sender</th>';
+					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 					$table .= '<th class="tg-kv4b">Titel</th>';
 					$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
 					$table .= '<th class="tg-kv4b">Langbeschreibung<br></th>';
@@ -911,7 +911,7 @@
 					$table .= "</style>";
 					$table .= '<table class="tg">';
 					$table .= "<tr>";
-					$table .= '<th class="tg-kv4b">Sender</th>';
+					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 					$table .= '<th class="tg-kv4b">Beginn<br></th>';
 					$table .= '<th class="tg-kv4b">Titel</th>';
 					$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
