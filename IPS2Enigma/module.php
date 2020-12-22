@@ -27,6 +27,7 @@
 		$this->RegisterPropertyBoolean("EPGlist_Data", false);
 		$this->RegisterPropertyBoolean("EPGlistSRef_Data", false);
 		$this->RegisterPropertyInteger("PiconSource", 0);
+		$this->RegisterPropertyBoolean("PiconUpdate", true);
 		$this->RegisterPropertyInteger("ScreenshotUpdate", 30);
 		$this->RegisterPropertyInteger("Screenshot", 640);
 		$this->RegisterTimer("DataUpdate", 0, 'Enigma_Get_DataUpdate($_IPS["TARGET"]);');
@@ -46,6 +47,7 @@
 		$arrayElements = array(); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Open", "caption" => "Aktiv"); 
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "IPAddress", "caption" => "IP");
+		$arrayElements[] = array("type" => "Label", "caption" => "Hinweis: Passwort für das WebIf muss deaktiviert sein!");
  		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Daten zum Enigma2-FTP Zugang (optional)");
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
@@ -87,7 +89,8 @@
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "PHP-Modul", "value" => 0);
 		$arrayOptions[] = array("label" => "Enigma-Receiver", "value" => 1);
-		$arrayElements[] = array("type" => "Select", "name" => "PiconSource", "caption" => "Picon Quelle", "options" => $arrayOptions );		
+		$arrayElements[] = array("type" => "Select", "name" => "PiconSource", "caption" => "Picon Quelle", "options" => $arrayOptions );
+		$arrayElements[] = array("type" => "CheckBox", "name" => "PiconUpdate", "caption" => "PiconUpdate bei jedem Neustart des Moduls");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Screenshot-Update in Sekunden (0 -> aus, 5 sek -> Minimum)");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "ScreenshotUpdate", "caption" => "Screenshot-Update (sek)");
@@ -1160,7 +1163,7 @@
 		$table .= "</style>";
 		$table .= '<table class="tg">';
 		$table .= "<tr>";
-		$table .= '<th class="tg-kv4b">Sender</th>';
+		$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 		$table .= '<th class="tg-kv4b">Beginn<br></th>';
 		$table .= '<th class="tg-kv4b">Titel</th>';
 		$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
@@ -1579,8 +1582,9 @@
 			$login = @$ssh->login($this->ReadPropertyString("User"), $this->ReadPropertyString("Password"));
 			if ($login == false)
 			{
-			    IPS_LogMessage("IPS2Enigma","SSH-Connect: Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
-			    return false;
+			    	IPS_LogMessage("IPS2Enigma","SSH-Connect: Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
+				$this->SendDebug("SSH_Connect", "SSH-Connect: Angegebene IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!", 0);
+			    	return false;
 			}
 			$Result = ""; //$ssh->exec($Command);
 			$ssh->disconnect();
@@ -1604,6 +1608,7 @@
 			$result = mkdir($WebfrontPath);
 			If (!$result) {
 				IPS_LogMessage("IPS2Enigma","Fehler bei der Verzeichniserstellung!");
+				$this->SendDebug("Get_HTML", "Fehler bei der Verzeichniserstellung!", 0);
 			}
 		}
 		$Path = opendir($SourcePath);
@@ -1618,76 +1623,91 @@
 	    
 	public function Get_Picons_Enigma()
 	{
-	        If (($this->ReadPropertyBoolean("Open") == true) ) {
-			// Prüfen, ob das Verzeichnis schon existiert
-			$WebfrontPath = IPS_GetKernelDir()."webfront".DIRECTORY_SEPARATOR."user".DIRECTORY_SEPARATOR."Picons_Enigma";
-			$SourcePath = "/usr/share/enigma2/picon";
-			if (file_exists($WebfrontPath)) {
-			    	// Das Verzeichnis existiert bereits
-			} else {
-			    	//Das Verzeichnis existiert nicht
-				$result = mkdir($WebfrontPath);
-				If (!$result) {
-					IPS_LogMessage("IPS2Enigma","Fehler bei der Verzeichniserstellung!");
-				}
-			}
-			
-			$ftp_server = $this->ReadPropertyString("IPAddress");
-			$ftp_user_name = $this->ReadPropertyString("User");
-			$ftp_user_pass = $this->ReadPropertyString("Password");
-			// set up basic connection
-			$conn_id = ftp_connect($ftp_server);
-			// login with username and password
-			$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-			If ($login_result == true) {
-				ftp_chdir($conn_id, $SourcePath);
-				// die Dateien in diesem Verzeichnis ermitteln
-				$contents = ftp_nlist($conn_id, ".");
-				for ($i = 0; $i <= count($contents) - 1; $i++) {
-					$result = ftp_get ($conn_id, $WebfrontPath.DIRECTORY_SEPARATOR.$contents[$i], $SourcePath.DIRECTORY_SEPARATOR.$contents[$i], FTP_BINARY);
+	        $PiconUpdate = $this->ReadPropertyBoolean("PiconUpdate");
+		If ($PiconUpdate == true) {
+			If (($this->ReadPropertyBoolean("Open") == true) ) {
+				// Prüfen, ob das Verzeichnis schon existiert
+				$WebfrontPath = IPS_GetKernelDir()."webfront".DIRECTORY_SEPARATOR."user".DIRECTORY_SEPARATOR."Picons_Enigma";
+				$SourcePath = "/usr/share/enigma2/picon";
+				if (file_exists($WebfrontPath)) {
+					// Das Verzeichnis existiert bereits
+				} else {
+					//Das Verzeichnis existiert nicht
+					$result = mkdir($WebfrontPath);
 					If (!$result) {
-						IPS_LogMessage("IPS2Enigma","Fehler beim Kopieren der Datei ".$contents[$i]."!");
+						IPS_LogMessage("IPS2Enigma","Fehler bei der Verzeichniserstellung!");
+						$this->SendDebug("Get_Picons_Enigma", "Fehler bei der Verzeichniserstellung!", 0);
 					}
-						
 				}
-				$result = true;
+
+				$ftp_server = $this->ReadPropertyString("IPAddress");
+				$ftp_user_name = $this->ReadPropertyString("User");
+				$ftp_user_pass = $this->ReadPropertyString("Password");
+				// set up basic connection
+				$conn_id = ftp_connect($ftp_server);
+				// login with username and password
+				$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+				If ($login_result == true) {
+					ftp_chdir($conn_id, $SourcePath);
+					// die Dateien in diesem Verzeichnis ermitteln
+					$contents = ftp_nlist($conn_id, ".");
+					for ($i = 0; $i <= count($contents) - 1; $i++) {
+						$result = ftp_get ($conn_id, $WebfrontPath.DIRECTORY_SEPARATOR.$contents[$i], $SourcePath.DIRECTORY_SEPARATOR.$contents[$i], FTP_BINARY);
+						If (!$result) {
+							IPS_LogMessage("IPS2Enigma","Fehler beim Kopieren der Datei ".$contents[$i]."!");
+							$this->SendDebug("Get_Picons_Enigma", "Fehler beim Kopieren der Datei ".$contents[$i]."!", 0);
+						}
+
+					}
+					$result = true;
+				}
+				else {
+					IPS_LogMessage("IPS2Enigma","Fehler bei der Verbindung!");
+					$this->SendDebug("Get_Picons_Enigma", "Fehler bei der Verbindung!", 0);
+					$result = false;
+				}
+				// close the connection
+				ftp_close($conn_id); 
 			}
 			else {
-				IPS_LogMessage("IPS2Enigma","Fehler bei der Verbindung!");
 				$result = false;
 			}
-			// close the connection
-			ftp_close($conn_id); 
 		}
 		else {
-			$result = false;
+			$this->SendDebug("Get_Picons_Enigma", "Picon Update wurde nicht durchgefuehrt", 0);
 		}
-	
         return $result;
 	}   
 	    
 	private function Get_Picons()
 	{
-		// Quelldatei
-		$FileName = IPS_GetKernelDir()."modules".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."imgs".DIRECTORY_SEPARATOR."Picons.zip";
-		// Zielpfad
-		$WebfrontPath = IPS_GetKernelDir()."webfront".DIRECTORY_SEPARATOR."user".DIRECTORY_SEPARATOR;  
-		if (file_exists($FileName)) {
-			// Prüfen, ob die Datei neuer ist, als die bisher installierte
-			If (filemtime($FileName) > GetValueInteger($this->GetIDForIdent("PiconUpdate"))) {
-				$zip = new ZipArchive;
-				if ($zip->open($FileName) === TRUE) {
-				$zip->extractTo($WebfrontPath);
-				$zip->close();
-					// Neues Erstellungsdatum der Datei sichern
-					SetValueInteger($this->GetIDForIdent("PiconUpdate"), filemtime($FileName));
-					IPS_LogMessage("IPS2Enigma","Picon Update erfolgreich");
-				} 
-				else {
-					IPS_LogMessage("IPS2Enigma","Picon Update nicht erfolgreich!");
+		$PiconUpdate = $this->ReadPropertyBoolean("PiconUpdate");
+		If ($PiconUpdate == true) {
+			// Quelldatei
+			$FileName = IPS_GetKernelDir()."modules".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."IPS2Enigma".DIRECTORY_SEPARATOR."imgs".DIRECTORY_SEPARATOR."Picons.zip";
+			// Zielpfad
+			$WebfrontPath = IPS_GetKernelDir()."webfront".DIRECTORY_SEPARATOR."user".DIRECTORY_SEPARATOR;  
+			if (file_exists($FileName)) {
+				// Prüfen, ob die Datei neuer ist, als die bisher installierte
+				If (filemtime($FileName) > GetValueInteger($this->GetIDForIdent("PiconUpdate"))) {
+					$zip = new ZipArchive;
+					if ($zip->open($FileName) === TRUE) {
+					$zip->extractTo($WebfrontPath);
+					$zip->close();
+						// Neues Erstellungsdatum der Datei sichern
+						SetValueInteger($this->GetIDForIdent("PiconUpdate"), filemtime($FileName));
+						$this->SendDebug("Get_Picons", "Picon Update erfolgreich", 0);
+					} 
+					else {
+						IPS_LogMessage("IPS2Enigma","Picon Update nicht erfolgreich!");
+						$this->SendDebug("Get_Picons", "Picon Update nicht erfolgreich!", 0);
+					}
 				}
 			}
-		}		
+		}
+		else {
+			$this->SendDebug("Get_Picons", "Picon Update wurde nicht durchgefuehrt", 0);
+		}
 	}
 				       
 /*	    
