@@ -90,7 +90,7 @@
 		$arrayOptions[] = array("label" => "PHP-Modul", "value" => 0);
 		$arrayOptions[] = array("label" => "Enigma-Receiver", "value" => 1);
 		$arrayElements[] = array("type" => "Select", "name" => "PiconSource", "caption" => "Picon Quelle", "options" => $arrayOptions );
-		$arrayElements[] = array("type" => "CheckBox", "name" => "PiconUpdate", "caption" => "PiconUpdate bei jedem Neustart des Moduls");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "PiconUpdate", "caption" => "Picon Update bei jedem Neustart des Moduls");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Screenshot-Update in Sekunden (0 -> aus, 5 sek -> Minimum)");
 		$arrayElements[] = array("type" => "IntervalBox", "name" => "ScreenshotUpdate", "caption" => "Screenshot-Update (sek)");
