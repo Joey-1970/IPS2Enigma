@@ -767,7 +767,7 @@
 			}
 			
 			If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
-				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
 				If ($xmlResult === false) {
 					$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
 					return;
