@@ -659,14 +659,29 @@
     	}            
 	    
 	// Beginn der Funktionen
+	private function GetContent(string $HTTP_Link) {
+    		$Content = @file_get_contents($HTTP_Link);
+    		If ($Content === false) {
+			$this->SendDebug("GetContent", "Fehler bei der Datenermittlung", 0);
+        		$this->SetStatus(202);
+			return $Result;
+    		}
+    		else {
+        		$xmlResult = new SimpleXMLElement($Content);
+        		$this->SetStatus(102);
+			return $xmlResult;
+    		}
+	}
+	    
 	public function Get_DataUpdate()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND (GetValueBoolean($this->GetIDForIdent("powerstate")) == true)) {
 			$this->SendDebug("Get_DataUpdate", "Ausfuehrung", 0);
 			$this->SetBuffer("FirstUpdate", "false");
-			//IPS_LogMessage("IPS2Enigma","TV-Daten ermitteln");
 			// das aktuelle Programm
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+			
+			//$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
        			If ($xmlResult === false) {
 				$this->SendDebug("Get_DataUpdate", "Fehler beim Lesen der Daten!", 0);
 				return;
