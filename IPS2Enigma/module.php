@@ -1279,50 +1279,75 @@
 	
 	public function Standby()
 	{
-	       If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = new SimpleXMLElement(file_get_contents("http:///".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=5"));
-		       	If ($xmlResult === false) {
-				$this->SendDebug("Standby", "Fehler beim Setzen der Daten!", 0);
+	       	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+		       	$xmlResult = $this->GetContent("http:///".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=5");
+			If ($xmlResult === false) {
+				$this->SendDebug("Standby", "Fehler beim Setzen der Powerstate-Daten!", 0);
 				return;
 			}
-	       }
+	       	}
 	}			       
 	
 	public function WakeUpStandby()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=4"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=4"));
+			If ($xmlResult === false) {
+				$this->SendDebug("WakeUpStandby", "Fehler beim Setzen der Powerstate-Daten!", 0);
+				return;
+			}
 		}
 	}
 				       
 	public function Reboot()
 	{
 	   	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) { 
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=2"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=2"));
+			If ($xmlResult === false) {
+				$this->SendDebug("Reboot", "Fehler beim Setzen der Powerstate-Daten!", 0);
+				return;
+			}
 		}
 	}
 	
 	public function RestartEnigma()
 	{
 	      	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=3"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=3"));
+			If ($xmlResult === false) {
+				$this->SendDebug("RestartEnigma", "Fehler beim Setzen der Powerstate-Daten!", 0);
+				return;
+			}
 		}
 	}		       
 	public function GetCurrentServiceName()
 	{
 		$result = "";
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-		       $xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
-		       $result = (string)$xmlResult->e2service[0]->e2servicename;
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+			If ($xmlResult === false) {
+				$this->SendDebug("GetCurrentServiceName", "Fehler beim Lesen des Service!", 0);
+				return $result;
+			}
+			else {
+		       		$result = (string)$xmlResult->e2service[0]->e2servicename;
+			}
 		}
 	return $result;
 	}
+	
 	public function GetCurrentServiceReference()
 	{
 		$result = "";
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-	      		$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
-	      		$result =  (string)$xmlResult->e2service[0]->e2servicereference;
+	      		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+			If ($xmlResult === false) {
+				$this->SendDebug("GetCurrentServiceReference", "Fehler beim Lesen der Service-Referenz!", 0);
+				return $result;
+			}
+			else {
+		       		$result = (string)$xmlResult->e2service[0]->e2servicereference;
+			}
 		}
 	return $result;
 	}
