@@ -697,7 +697,7 @@
 			
 			If ($this->ReadPropertyBoolean("HDD_Data") == true) {
 				// Festplattendaten
-				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/about"));
+				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/about");
 				If ($xmlResult === false) {
 					$this->SendDebug("Get_DataUpdate", "Fehler beim Lesen der HDD-Daten!", 0);
 					return;
