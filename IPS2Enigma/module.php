@@ -1291,7 +1291,7 @@
 	public function WakeUpStandby()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=4"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=4");
 			If ($xmlResult === false) {
 				$this->SendDebug("WakeUpStandby", "Fehler beim Setzen der Powerstate-Daten!", 0);
 				return;
@@ -1302,7 +1302,7 @@
 	public function Reboot()
 	{
 	   	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) { 
-			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=2"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=2");
 			If ($xmlResult === false) {
 				$this->SendDebug("Reboot", "Fehler beim Setzen der Powerstate-Daten!", 0);
 				return;
@@ -1313,7 +1313,7 @@
 	public function RestartEnigma()
 	{
 	      	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=3"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/powerstate?newstate=3");
 			If ($xmlResult === false) {
 				$this->SendDebug("RestartEnigma", "Fehler beim Setzen der Powerstate-Daten!", 0);
 				return;
@@ -1324,7 +1324,7 @@
 	{
 		$result = "";
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
 			If ($xmlResult === false) {
 				$this->SendDebug("GetCurrentServiceName", "Fehler beim Lesen des Service!", 0);
 				return $result;
@@ -1340,7 +1340,7 @@
 	{
 		$result = "";
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-	      		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
+	      		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
 			If ($xmlResult === false) {
 				$this->SendDebug("GetCurrentServiceReference", "Fehler beim Lesen der Service-Referenz!", 0);
 				return $result;
