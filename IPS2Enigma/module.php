@@ -1528,8 +1528,8 @@
 	
 	public function GetBouquetsInformation()
 	{
+		$Result = false;
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$Result = false;
 			
 			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
 			If ($xmlResult === false) {
