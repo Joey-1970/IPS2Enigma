@@ -1196,7 +1196,9 @@
 		$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 		$table .= '<th class="tg-kv4b">Beginn<br></th>';
 		$table .= '<th class="tg-kv4b">Titel</th>';
-		$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+		If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
+			$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+		}
 		$table .= '<th class="tg-kv4b">Dauer<br></th>';
 		$table .= '<th class="tg-kv4b"></th>';
 		$table .= '<th class="tg-kv4b"></th>';
@@ -1212,7 +1214,9 @@
 				onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
 			$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
 			$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
-			$table .= '<td class="tg-611x" onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_D\' })">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';			
+			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
+				$table .= '<td class="tg-611x" onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_D\' })">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';			
+			}
 			$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
 			$table .= '</tr>';
 			$table .= '<tr>';
