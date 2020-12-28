@@ -16,6 +16,7 @@
 		$this->RegisterPropertyInteger("DataUpdate", 15);
 		$this->RegisterPropertyBoolean("HDD_Data", false);
 		$this->RegisterPropertyBoolean("Movielist_Data", false);
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowShortDiscription", true);
 		$this->RegisterPropertyBoolean("Enigma2_Data", false);
 		$this->RegisterPropertyBoolean("Signal_Data", false);
 		$this->RegisterPropertyBoolean("Network_Data", false);
@@ -60,7 +61,14 @@
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Enigma2_Data", "caption" => "Enigma2 Daten anzeigen"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "HDD_Data", "caption" => "HDD Daten anzeigen");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Network_Data", "caption" => "Netzwerk Daten anzeigen");
-		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen");
+		
+		$ArrayRowLayout = array();
+		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen (HTML)");
+		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "Movielist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
+		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
+		
+		//$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen");
+		
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Signal_Data", "caption" => "Empfangssignal Daten anzeigen");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "RC_Data", "caption" => "Virtuelle Fernbedienung erstellen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
@@ -1178,7 +1186,9 @@
 		$table .= '<table class="tg">';
 		$table .= "<tr>";
 		$table .= '<th class="tg-kv4b" align="left" width=150 >Titel</th>';
-		$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+		If ($this->ReadPropertyBoolean("Movielist_Data_ShowShortDiscription") == true) {
+			$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+		}
 		$table .= '<th class="tg-kv4b">Langbeschreibung<br></th>';
 		$table .= '<th class="tg-kv4b">Quelle</th>';
 		$table .= '<th class="tg-kv4b">Länge</th>';
@@ -1189,7 +1199,9 @@
 			$Servicereference = (string)$xmlResult->e2movie[$i]->e2servicereference;
 			$table .= '<tr>';
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2title.'</td>';
-			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2description.'</td>';
+			If ($this->ReadPropertyBoolean("Movielist_Data_ShowShortDiscription") == true) {
+				$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2description.'</td>';
+			}
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2descriptionextended.'</td>';
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2servicename.'</td>';
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2length.'</td>';
