@@ -763,7 +763,8 @@
 			$this->SendDebug("Get_EPGUpdate", "Ausfuehrung", 0);
 			$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 			$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
+			
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
 			If ($xmlResult === false) {
 				$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
 				return;
