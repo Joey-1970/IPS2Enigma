@@ -25,6 +25,7 @@
 		$this->RegisterPropertyBoolean("EPGnext_Data", false);
 		$this->RegisterPropertyInteger("EPGUpdate", 60);
 		$this->RegisterPropertyBoolean("EPGlist_Data", false);
+		$this->RegisterPropertyBoolean("EPGlist_Data_ShowShortDiscription", true);
 		$this->RegisterPropertyBoolean("EPGlistSRef_Data", false);
 		$this->RegisterPropertyInteger("PiconSource", 0);
 		$this->RegisterPropertyBoolean("PiconUpdate", true);
@@ -81,7 +82,14 @@
 		}
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnow_Data", "caption" => "EPG des aktuellen Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnext_Data", "caption" => "EPG des folgenden Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)");
-		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
+		
+		$ArrayRowLayout = array();
+		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
+		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "EPGlist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
+		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
+		
+		//$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
+		
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data", "caption" => "EPG des aktuellen und der folgenden Programms des aktuellen Senders anzeigen (HTML)");		
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Quelle der für die HTML-Aufbereitung genutzten Picons:");
