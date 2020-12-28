@@ -675,11 +675,44 @@
 			return $Result;
     		}
     		else {
-        		$xmlResult = new SimpleXMLElement($Content);
-        		$this->SetStatus(102);
-			return $xmlResult;
+        		If ($this->isXML($Content) == true) {
+				$xmlResult = new SimpleXMLElement($Content);
+        			$this->SetStatus(102);
+				return $xmlResult;
+			}
+			else {
+				$this->SetStatus(202);
+			}
     		}
 	}
+	
+	private function isXML($xml)
+	{
+    		libxml_use_internal_errors(true);
+
+    		$doc = new DOMDocument('1.0', 'utf-8');
+	    	$doc->loadXML($xml);
+
+	    	$errors = libxml_get_errors();
+
+	    	if(empty($errors)){
+			return true;
+	    	}
+
+	    	$error = $errors[0];
+	    	if($error->level < 3){
+			$this->SendDebug("isXML", "XML mit Fehlern < Level 3!", 0);
+			return true;
+	    	}
+
+	    	$explodedxml = explode("r", $xml);
+	    	$badxml = $explodedxml[($error->line)-1];
+
+	    	$message = $error->message . ' at line ' . $error->line . '. Bad XML: ' . htmlentities($badxml);
+		$this->SendDebug("isXML", "XML mit Fehlern: ".$message, 0);
+	return false;
+	}    
+	    
 	    
 	public function Get_DataUpdate()
 	{
