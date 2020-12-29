@@ -1171,6 +1171,10 @@
 	
 	private function GetMovieListUpdate()
 	{
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowShortDiscription", true);
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowSource", true);
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowMediaPlayer", true);
+		
 		$this->SendDebug("GetMovieListUpdate", "Ausfuehrung", 0);
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
@@ -1190,10 +1194,14 @@
 			$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
 		}
 		$table .= '<th class="tg-kv4b">Langbeschreibung<br></th>';
-		$table .= '<th class="tg-kv4b">Quelle</th>';
+		If ($this->ReadPropertyBoolean("Movielist_Data_ShowSource") == true) {
+			$table .= '<th class="tg-kv4b">Quelle</th>';
+		}
 		$table .= '<th class="tg-kv4b">Länge</th>';
 		$table .= '<th class="tg-kv4b"></th>';
-		$table .= '<th class="tg-kv4b"></th>';
+		If ($this->ReadPropertyBoolean("Movielist_Data_ShowMediaPlayer") == true) {
+			$table .= '<th class="tg-kv4b"></th>';
+		}
 		$table .= '</tr>';
 		for ($i = 0; $i <= count($xmlResult) - 1; $i++) {
 			$Servicereference = (string)$xmlResult->e2movie[$i]->e2servicereference;
@@ -1203,15 +1211,19 @@
 				$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2description.'</td>';
 			}
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2descriptionextended.'</td>';
-			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2servicename.'</td>';
+			If ($this->ReadPropertyBoolean("Movielist_Data_ShowSource") == true) {
+				$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2servicename.'</td>';
+			}
 			$table .= '<td class="tg-611x">'.$xmlResult->e2movie[$i]->e2length.'</td>';
 			// Aufzeichnung im TV abspielen
 			$table .= '<td class="tg-611x"><img src='.$FilePathPlay.' alt="Abspielen" 
 				onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.$i.'&Source=Movielist_Play&SRef='.$Servicereference.'\' })"></td>';
-			// Aufzeichnung aus dem Webfront streamen
-			$MovieFilename = str_replace(" ", "%20", (string)$xmlResult->e2movie[$i]->e2filename);
-			$Targetlink = "http://".$this->ReadPropertyString("IPAddress")."/web/ts.m3u?file=".$MovieFilename; 
-			$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+			If ($this->ReadPropertyBoolean("Movielist_Data_ShowMediaPlayer") == true) {
+				// Aufzeichnung aus dem Webfront streamen
+				$MovieFilename = str_replace(" ", "%20", (string)$xmlResult->e2movie[$i]->e2filename);
+				$Targetlink = "http://".$this->ReadPropertyString("IPAddress")."/web/ts.m3u?file=".$MovieFilename; 
+				$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+			}
 			$table .= '</tr>';
 		}
 		$table .= '</table>';
