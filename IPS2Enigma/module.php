@@ -1171,10 +1171,6 @@
 	
 	private function GetMovieListUpdate()
 	{
-		$this->RegisterPropertyBoolean("Movielist_Data_ShowShortDiscription", true);
-		$this->RegisterPropertyBoolean("Movielist_Data_ShowSource", true);
-		$this->RegisterPropertyBoolean("Movielist_Data_ShowMediaPlayer", true);
-		
 		$this->SendDebug("GetMovieListUpdate", "Ausfuehrung", 0);
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
