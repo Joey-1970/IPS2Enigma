@@ -17,6 +17,8 @@
 		$this->RegisterPropertyBoolean("HDD_Data", false);
 		$this->RegisterPropertyBoolean("Movielist_Data", false);
 		$this->RegisterPropertyBoolean("Movielist_Data_ShowShortDiscription", true);
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowSource", true);
+		$this->RegisterPropertyBoolean("Movielist_Data_ShowMediaPlayer", true);
 		$this->RegisterPropertyBoolean("Enigma2_Data", false);
 		$this->RegisterPropertyBoolean("Signal_Data", false);
 		$this->RegisterPropertyBoolean("Network_Data", false);
@@ -61,14 +63,6 @@
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Enigma2_Data", "caption" => "Enigma2 Daten anzeigen"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "HDD_Data", "caption" => "HDD Daten anzeigen");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Network_Data", "caption" => "Netzwerk Daten anzeigen");
-		
-		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen (HTML)");
-		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "Movielist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
-		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
-		
-		//$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen");
-		
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Signal_Data", "caption" => "Empfangssignal Daten anzeigen");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "RC_Data", "caption" => "Virtuelle Fernbedienung erstellen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
@@ -99,6 +93,12 @@
 		//$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
 		
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data", "caption" => "EPG des aktuellen und der folgenden Programms des aktuellen Senders anzeigen (HTML)");		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen (HTML)");
+		$arrayElements[] = array("type" => "Label", "caption" => "Optionen zu Daten der Aufzeichnungen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data_ShowSource", "caption" => "Quelle anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data_ShowMediaPlayer", "caption" => "Link zur Wiedergabe im Media Player anzeigen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "Label", "caption" => "Quelle der für die HTML-Aufbereitung genutzten Picons:");
 		$arrayElements[] = array("type" => "Label", "caption" => "(Voraussetzungen: FTP-Zugang zum Receiver und dort installierte Picons)");
