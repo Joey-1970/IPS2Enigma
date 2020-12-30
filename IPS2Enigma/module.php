@@ -46,8 +46,8 @@
 		$this->RegisterProfileInteger("Enigma.GB", "Gauge", "", " GB", 0, 1000000, 1);
 		
 		$this->RegisterProfileInteger("Enigma.UpDown", "Shutter", "", "", 0, 1, 0);
-		IPS_SetVariableProfileAssociation("IPS2Pioneer.UpDown", 0, "+", "Shutter", -1);
-		IPS_SetVariableProfileAssociation("IPS2Pioneer.UpDown", 1, "-", "Shutter", -1);
+		IPS_SetVariableProfileAssociation("Enigma.UpDown", 0, "+", "Shutter", -1);
+		IPS_SetVariableProfileAssociation("Enigma.UpDown", 1, "-", "Shutter", -1);
 		
 	}
 	    
