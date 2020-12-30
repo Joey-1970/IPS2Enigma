@@ -40,10 +40,14 @@
 		$this->RegisterTimer("StatusInfo", 0, 'Enigma_GetStatusInfo($_IPS["TARGET"]);');
 		
 		// Profile anlegen
-		$this->RegisterProfileInteger("Enigma.Volume", "Music", "", "", 0, 100, 1);
+		$this->RegisterProfileInteger("Enigma.Volume", "Melody", "", "", 0, 100, 1);
 		$this->RegisterProfileInteger("Enigma.min", "Clock", "", " min", 0, 1000000, 1);
 		$this->RegisterProfileInteger("Enigma.db", "Intensity", "", " db", 0, 1000000, 1);
 		$this->RegisterProfileInteger("Enigma.GB", "Gauge", "", " GB", 0, 1000000, 1);
+		
+		$this->RegisterProfileInteger("Enigma.UpDown", "Shutter", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("IPS2Pioneer.UpDown", 0, "+", "Shutter", -1);
+		IPS_SetVariableProfileAssociation("IPS2Pioneer.UpDown", 1, "-", "Shutter", -1);
 		
 	}
 	    
@@ -145,7 +149,6 @@
 		$this->SetBuffer("FirstUpdate", "false");
 		
 		$this->RegisterVariableInteger("PiconUpdate", "Picon Update", "~UnixTimestamp", 1500);
-		$this->DisableAction("PiconUpdate");
 		IPS_SetHidden($this->GetIDForIdent("PiconUpdate"), true);
 		
 		//Status-Variablen anlegen
@@ -179,6 +182,8 @@
 		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
+		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
+		$this->EnableAction("volume_UpDown");		
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
 		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
 		
@@ -367,19 +372,47 @@
 			case "rc_vol_up":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
 					// 115 Key "volume up"
-					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=115"));
+					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=115");
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+						return;
+					}
 				}
 				break;
 			case "rc_vol_down":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
 					// 114 Key "volume down"
-					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=114"));
+					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=114");
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+						return;
+					}
 				}
 				break;
 			case "volume":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
-					// Funktion fehlt noch
-					
+					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=set".$Value);
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+						return;
+					}	
+				}
+				break;
+			case "volume_UpDown":
+			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
+					If ($Value == 0) {
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=115");
+						If ($xmlResult === false) {
+							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+							return;
+						}					}
+					else {
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=114");
+						If ($xmlResult === false) {
+							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+							return;
+						}
+					}
 				}
 				break;
 			case "rc_power":
