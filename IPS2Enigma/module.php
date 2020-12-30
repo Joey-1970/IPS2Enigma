@@ -38,6 +38,13 @@
 		$this->RegisterTimer("EPGUpdate", 0, 'Enigma_Get_EPGUpdate($_IPS["TARGET"]);');
 		$this->RegisterTimer("ScreenshotUpdate", 0, 'Enigma_GetScreenshot($_IPS["TARGET"]);');
 		$this->RegisterTimer("StatusInfo", 0, 'Enigma_GetStatusInfo($_IPS["TARGET"]);');
+		
+		// Profile anlegen
+		$this->RegisterProfileInteger("Enigma.Volume", "Music", "", "", 0, 100, 1);
+		$this->RegisterProfileInteger("Enigma.min", "Clock", "", " min", 0, 1000000, 1);
+		$this->RegisterProfileInteger("Enigma.db", "Intensity", "", " db", 0, 1000000, 1);
+		$this->RegisterProfileInteger("Enigma.GB", "Gauge", "", " GB", 0, 1000000, 1);
+		
 	}
 	    
 	public function GetConfigurationForm() { 
@@ -130,12 +137,6 @@
         {
 		// Diese Zeile nicht löschen
 		parent::ApplyChanges();
-		
-		// Profil anlegen
-		$this->RegisterProfileInteger("time.min", "Clock", "", " min", 0, 1000000, 1);
-		$this->RegisterProfileInteger("snr.db", "Intensity", "", " db", 0, 1000000, 1);
-		$this->RegisterProfileInteger("gigabyte.GB", "Gauge", "", " GB", 0, 1000000, 1);
-		
 		// Objekte und Hook anlegen
 		if (IPS_GetKernelRunlevel() == KR_READY) {
 			$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
@@ -175,8 +176,8 @@
 		}
 		If ($this->ReadPropertyBoolean("HDD_Data") == true) {
 			$this->RegisterVariableString("e2hddinfo_model", "HDD Model", "", 80);
-			$this->RegisterVariableInteger("e2hddinfo_capacity", "HDD Capacity", "gigabyte.GB", 90);
-			$this->RegisterVariableInteger("e2hddinfo_free", "HDD Free", "gigabyte.GB", 95);
+			$this->RegisterVariableInteger("e2hddinfo_capacity", "HDD Capacity", "Enigma.GB", 90);
+			$this->RegisterVariableInteger("e2hddinfo_free", "HDD Free", "Enigma.GB", 95);
 		}
 		
 		// Daten aus der Status-Funktion
@@ -184,7 +185,7 @@
 		$this->EnableAction("powerstate");
 		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
 		$this->DisableAction("isRecording");
-		$this->RegisterVariableInteger("volume", "Volume", "~Intensity.100", 106);
+		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
 		$this->DisableAction("currservice_serviceref");
@@ -203,11 +204,11 @@
 			$this->DisableAction("e2eventstart");
 			$this->RegisterVariableInteger("e2eventend", "Event End", "~UnixTimestampTime", 150);
 			$this->DisableAction("e2eventend");
-			$this->RegisterVariableInteger("e2eventduration", "Event Duration", "time.min", 160);		
+			$this->RegisterVariableInteger("e2eventduration", "Event Duration", "Enigma.min", 160);		
 			$this->DisableAction("e2eventduration");
-			$this->RegisterVariableInteger("e2eventpast", "Event Past", "time.min", 170);
+			$this->RegisterVariableInteger("e2eventpast", "Event Past", "Enigma.min", 170);
 			$this->DisableAction("e2eventpast");
-			$this->RegisterVariableInteger("e2eventleft", "Event Left", "time.min", 180);
+			$this->RegisterVariableInteger("e2eventleft", "Event Left", "Enigma.min", 180);
 			$this->DisableAction("e2eventleft");
 			$this->RegisterVariableInteger("e2eventprogress", "Event Progress", "~Intensity.100", 190);
 			$this->DisableAction("e2eventprogress");
@@ -224,7 +225,7 @@
 			$this->DisableAction("e2nexteventstart");
 			$this->RegisterVariableInteger("e2nexteventend", "Next Event End", "~UnixTimestampTime", 240);
 			$this->DisableAction("e2nexteventend");
-			$this->RegisterVariableInteger("e2nexteventduration", "Next Event Duration", "time.min", 250);
+			$this->RegisterVariableInteger("e2nexteventduration", "Next Event Duration", "Enigma.min", 250);
 			$this->DisableAction("e2nexteventduration");		
 		}
 		
@@ -237,7 +238,7 @@
 		}
 		
 		If ($this->ReadPropertyBoolean("Signal_Data") == true) {
-			$this->RegisterVariableInteger("e2snrdb", "Signal-to-Noise Ratio (dB)", "snr.db", 300);
+			$this->RegisterVariableInteger("e2snrdb", "Signal-to-Noise Ratio (dB)", "Enigma.db", 300);
 			$this->RegisterVariableInteger("e2snr", "Signal-to-Noise Ratio", "~Intensity.100", 310);
 			$this->RegisterVariableInteger("e2ber", "Bit error rate", "", 320);
 			$this->RegisterVariableInteger("e2agc", "Automatic Gain Control", "~Intensity.100", 330);
