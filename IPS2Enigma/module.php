@@ -151,20 +151,13 @@
 		//Status-Variablen anlegen
 		If ($this->ReadPropertyBoolean("Enigma2_Data") == true) {
 			$this->RegisterVariableString("e2oeversion", "E2 OE-Version", "", 10);
-			$this->DisableAction("e2oeversion");
 			$this->RegisterVariableString("e2enigmaversion", "E2 Version", "", 20);
-			$this->DisableAction("e2enigmaversion");
 			$this->RegisterVariableString("e2distroversion", "E2 Distro-Version", "", 30);
-			$this->DisableAction("e2distroversion");
 			$this->RegisterVariableString("e2imageversion", "E2 Image-Version", "", 40);
-			$this->DisableAction("e2imageversion");
 			$this->RegisterVariableString("e2webifversion", "E2 WebIf-Version", "", 50);
-			$this->DisableAction("e2webifversion");
 		}
 		$this->RegisterVariableString("e2devicename", "Model", "", 60);
-		$this->DisableAction("e2devicename");
 		$this->RegisterVariableString("e2tunerinfo", "Tuner Information", "~HTMLBox", 65);
-		$this->DisableAction("e2tunerinfo");
 		
 		If ($this->ReadPropertyBoolean("Network_Data") == true) {
 			$this->RegisterVariableString("e2lanname", "Schnittstelle", "", 69);
@@ -184,49 +177,30 @@
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
 		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
-		$this->DisableAction("isRecording");
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
-		$this->DisableAction("currservice_serviceref");
-		
 		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
-		$this->DisableAction("e2servicename");
 		
 		If ($this->ReadPropertyBoolean("EPGnow_Data") == true) {
 			$this->RegisterVariableString("e2eventtitle", "Event Title", "", 120);
-			$this->DisableAction("e2eventtitle");
 			$this->RegisterVariableString("e2eventdescription", "Event Description", "", 125);
-			$this->DisableAction("e2eventdescription");
 			$this->RegisterVariableString("e2eventdescriptionextended", "Event Description Extended", "", 130);
-			$this->DisableAction("e2eventdescriptionextended");
 			$this->RegisterVariableInteger("e2eventstart", "Event Start", "~UnixTimestampTime", 140);
-			$this->DisableAction("e2eventstart");
 			$this->RegisterVariableInteger("e2eventend", "Event End", "~UnixTimestampTime", 150);
-			$this->DisableAction("e2eventend");
 			$this->RegisterVariableInteger("e2eventduration", "Event Duration", "Enigma.min", 160);		
-			$this->DisableAction("e2eventduration");
 			$this->RegisterVariableInteger("e2eventpast", "Event Past", "Enigma.min", 170);
-			$this->DisableAction("e2eventpast");
 			$this->RegisterVariableInteger("e2eventleft", "Event Left", "Enigma.min", 180);
-			$this->DisableAction("e2eventleft");
 			$this->RegisterVariableInteger("e2eventprogress", "Event Progress", "~Intensity.100", 190);
-			$this->DisableAction("e2eventprogress");
 		}
 		
 		If ($this->ReadPropertyBoolean("EPGnext_Data") == true) {
 			$this->RegisterVariableString("e2nexteventtitle", "Next Event Title", "", 200);
-			$this->DisableAction("e2nexteventtitle");
 			$this->RegisterVariableString("e2nexteventdescription", "Next Event Description", "", 210);
-			$this->DisableAction("e2nexteventdescription");
 			$this->RegisterVariableString("e2nexteventdescriptionextended", "Next Event Description Extended", "", 220);
-			$this->DisableAction("e2nexteventdescriptionextended");
 			$this->RegisterVariableInteger("e2nexteventstart", "Next Event Start", "~UnixTimestampTime", 230);
-			$this->DisableAction("e2nexteventstart");
 			$this->RegisterVariableInteger("e2nexteventend", "Next Event End", "~UnixTimestampTime", 240);
-			$this->DisableAction("e2nexteventend");
-			$this->RegisterVariableInteger("e2nexteventduration", "Next Event Duration", "Enigma.min", 250);
-			$this->DisableAction("e2nexteventduration");		
+			$this->RegisterVariableInteger("e2nexteventduration", "Next Event Duration", "Enigma.min", 250);	
 		}
 		
 		If (($this->ReadPropertyBoolean("EPGnow_Data") == true) OR ($this->ReadPropertyBoolean("EPGnext_Data") == true)) {
@@ -342,22 +316,19 @@
 		
 		If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
 			$this->RegisterVariableString("e2epglistHTML", "EPG Liste", "~HTMLBox", 950);
-			$this->DisableAction("e2epglistHTML");
 		}
 		
 		If ($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) {
 			$this->RegisterVariableString("e2epglistSRefHTML", "EPG Liste Sender", "~HTMLBox", 950);
-			$this->DisableAction("e2epglistSRefHTML");
-		}
-		
-		If ($this->ReadPropertyInteger("PiconSource") == 0) {
-			$this->Get_Picons();
-		}
-		elseif ($this->ReadPropertyInteger("PiconSource") == 1) {
-			$this->Get_Picons_Enigma();
 		}
 		
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			If ($this->ReadPropertyInteger("PiconSource") == 0) {
+				$this->Get_Picons();
+			}
+			elseif ($this->ReadPropertyInteger("PiconSource") == 1) {
+				$this->Get_Picons_Enigma();
+			}
 			$this->Get_BasicData();
 			$this->Get_HTML();
 			$this->SetTimerInterval("DataUpdate", ($this->ReadPropertyInteger("DataUpdate") * 1000));
