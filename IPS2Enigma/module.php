@@ -180,7 +180,7 @@
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
 		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
-		$this->RegisterVariableInteger("Channel_UpDown", "Volume", "Enigma.UpDown", 105);
+		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
 		$this->EnableAction("Channel_UpDown");	
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
