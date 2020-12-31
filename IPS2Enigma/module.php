@@ -180,10 +180,13 @@
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
 		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
+		$this->RegisterVariableInteger("Channel_UpDown", "Volume", "Enigma.UpDown", 105);
+		$this->EnableAction("Channel_UpDown");	
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
 		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
-		$this->EnableAction("volume_UpDown");		
+		$this->EnableAction("volume_UpDown");	
+		
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
 		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
 		
@@ -414,6 +417,27 @@
 					}
 					else {
 						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=down");
+						If ($xmlResult === false) {
+							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+							return;
+						}
+					}
+				}
+				break;
+			case "Channel_UpDown":
+			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
+					$this->SetValue($Ident, $Value);
+					If ($Value == 0) {
+						// 402 Key "bouquet up"
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=402");
+						If ($xmlResult === false) {
+							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+							return;
+						}
+					}
+					else {
+						// 403 Key "bouquet down"
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=403");
 						If ($xmlResult === false) {
 							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 							return;
