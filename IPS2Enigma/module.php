@@ -49,6 +49,25 @@
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 0, "+", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 1, "-", "Shutter", -1);
 		
+		// Status-Variablen anlegen
+		$this->RegisterVariableString("e2devicename", "Model", "", 60);
+		$this->RegisterVariableString("e2tunerinfo", "Tuner Information", "~HTMLBox", 65);
+		
+		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
+		$this->EnableAction("powerstate");
+		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
+		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
+		$this->EnableAction("Channel_UpDown");	
+		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
+		$this->EnableAction("volume");
+		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
+		$this->EnableAction("volume_UpDown");	
+		
+		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
+		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
+		
+		$this->RegisterVariableInteger("PiconUpdate", "Picon Update", "~UnixTimestamp", 1500);
+		IPS_SetHidden($this->GetIDForIdent("PiconUpdate"), true);
 	}
 	    
 	public function GetConfigurationForm() { 
@@ -141,15 +160,7 @@
         {
 		// Diese Zeile nicht löschen
 		parent::ApplyChanges();
-		// Objekte und Hook anlegen
-		if (IPS_GetKernelRunlevel() == KR_READY) {
-			$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
-			$this->RegisterHook("/hook/IPS2Enigma");
-		}
 		$this->SetBuffer("FirstUpdate", "false");
-		
-		$this->RegisterVariableInteger("PiconUpdate", "Picon Update", "~UnixTimestamp", 1500);
-		IPS_SetHidden($this->GetIDForIdent("PiconUpdate"), true);
 		
 		//Status-Variablen anlegen
 		If ($this->ReadPropertyBoolean("Enigma2_Data") == true) {
@@ -175,20 +186,6 @@
 			$this->RegisterVariableInteger("e2hddinfo_capacity", "HDD Capacity", "Enigma.GB", 90);
 			$this->RegisterVariableInteger("e2hddinfo_free", "HDD Free", "Enigma.GB", 95);
 		}
-		
-		// Daten aus der Status-Funktion
-		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
-		$this->EnableAction("powerstate");
-		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
-		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
-		$this->EnableAction("Channel_UpDown");	
-		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
-		$this->EnableAction("volume");
-		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
-		$this->EnableAction("volume_UpDown");	
-		
-		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
-		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
 		
 		If ($this->ReadPropertyBoolean("EPGnow_Data") == true) {
 			$this->RegisterVariableString("e2eventtitle", "Event Title", "", 120);
@@ -225,9 +222,6 @@
 			$this->RegisterVariableInteger("e2ber", "Bit error rate", "", 320);
 			$this->RegisterVariableInteger("e2agc", "Automatic Gain Control", "~Intensity.100", 330);
 		}
-		
-		//$this->RegisterVariableString("e2stream", "Stream-Video", "~HTMLBox", 900);
-		//$this->DisableAction("e2stream");
 		
 		If ($this->ReadPropertyBoolean("RC_Data") == true) {
 			$this->RegisterVariableBoolean("rc_power", "Power", "~Switch", 500);
@@ -331,6 +325,12 @@
 		}
 		
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+			// Objekte und Hook anlegen
+			if (IPS_GetKernelRunlevel() == KR_READY) {
+				$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
+				$this->RegisterHook("/hook/IPS2Enigma");
+			}
+			
 			If ($this->ReadPropertyInteger("PiconSource") == 0) {
 				$this->Get_Picons();
 			}
@@ -353,6 +353,10 @@
 			$this->SetStatus(102);
 		}
 		else {
+			$this->SetTimerInterval("DataUpdate", 0));
+			$this->SetTimerInterval("EPGUpdate", 0));
+			$this->SetTimerInterval("ScreenshotUpdate", 0));
+			$this->SetTimerInterval("StatusInfo", 0);
 			$this->SetStatus(104);
 		}
         }
