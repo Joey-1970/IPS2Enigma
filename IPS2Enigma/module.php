@@ -404,12 +404,14 @@
 				break;
 			case "volume_UpDown":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
+					$this->SetValue($Ident, $Value);
 					If ($Value == 0) {
 						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=up");
 						If ($xmlResult === false) {
 							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 							return;
-						}					}
+						}
+					}
 					else {
 						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=down");
 						If ($xmlResult === false) {
