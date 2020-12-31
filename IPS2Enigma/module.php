@@ -428,16 +428,16 @@
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
 					$this->SetValue($Ident, $Value);
 					If ($Value == 0) {
-						// 402 Key "bouquet up"
-						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=402");
+						// 106 Key "right"
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=106");
 						If ($xmlResult === false) {
 							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 							return;
 						}
 					}
 					else {
-						// 403 Key "bouquet down"
-						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=403");
+						// 105 Key "left"
+						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=105");
 						If ($xmlResult === false) {
 							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 							return;
