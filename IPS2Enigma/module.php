@@ -353,9 +353,9 @@
 			$this->SetStatus(102);
 		}
 		else {
-			$this->SetTimerInterval("DataUpdate", 0));
-			$this->SetTimerInterval("EPGUpdate", 0));
-			$this->SetTimerInterval("ScreenshotUpdate", 0));
+			$this->SetTimerInterval("DataUpdate", 0);
+			$this->SetTimerInterval("EPGUpdate", 0);
+			$this->SetTimerInterval("ScreenshotUpdate", 0);
 			$this->SetTimerInterval("StatusInfo", 0);
 			$this->SetStatus(104);
 		}
