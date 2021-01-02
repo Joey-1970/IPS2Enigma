@@ -1220,7 +1220,7 @@
 			$this->SetValue("e2movielist", "N/A");
 			return;
 		}
-		If (is_array($xmlResult) == false) {
+		If ($xmlResult->count() > 0) {
 			$this->SendDebug("GetMovieListUpdate", "Keine Aufzeichnungs-Daten vorhanden", 0);
 			$this->SetValue("e2movielist", "N/A");
 			return;
@@ -1289,7 +1289,7 @@
 			$this->SetValue("e2epglistHTML", "N/A");
 			return;
 		}
-		If (is_array($xmlResult) == false) {
+		If ($xmlResult->count() > 0) {
 			$this->SendDebug("GetEPGNowNextData", "Keine EPG-Daten vorhanden", 0);
 			$this->SetValue("e2epglistHTML", "N/A");
 			return;
