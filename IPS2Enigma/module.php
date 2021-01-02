@@ -1217,6 +1217,12 @@
 		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/movielist");
 		If ($xmlResult === false) {
 			$this->SendDebug("GetMovieListUpdate", "Fehler beim Lesen der Movielist-Daten!", 0);
+			$this->SetValue("e2movielist", "N/A");
+			return;
+		}
+		If (is_array($xmlResult) == false) {
+			$this->SendDebug("GetMovieListUpdate", "Keine Aufzeichnungs-Daten vorhanden", 0);
+			$this->SetValue("e2movielist", "N/A");
 			return;
 		}
 		$table = '<style type="text/css">';
@@ -1262,7 +1268,7 @@
 			$table .= '</tr>';
 		}
 		$table .= '</table>';
-		SetValueString($this->GetIDForIdent("e2movielist") , $table);
+		$this->SetValue("e2movielist", $table);
 	}
 	    
 	private function GetEPGNowNextData()
@@ -1272,13 +1278,20 @@
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
 		If ($xmlResult === false) {
-			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der EPG-Daten!", 0);
+			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der Service-Referenz!", 0);
+			$this->SetValue("e2epglistHTML", "N/A");
 			return;
 		}
 		$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
 		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgnownext?bRef=".urlencode($bouquet));
 		If ($xmlResult === false) {
 			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der EPG-Daten!", 0);
+			$this->SetValue("e2epglistHTML", "N/A");
+			return;
+		}
+		If (is_array($xmlResult) == false) {
+			$this->SendDebug("GetEPGNowNextData", "Keine EPG-Daten vorhanden", 0);
+			$this->SetValue("e2epglistHTML", "N/A");
 			return;
 		}
 		$table = '<style type="text/css">';
@@ -1326,7 +1339,7 @@
 			$table .= '</tr>';
 		}
 		$table .= '</table>';
-		SetValueString($this->GetIDForIdent("e2epglistHTML"), $table);
+		$this->SetValue("e2epglistHTML", $table);
 	}
 	
 	    
