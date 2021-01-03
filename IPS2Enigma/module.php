@@ -371,15 +371,6 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-			case "muted":
-			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
-					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=mute");
-					If ($xmlResult === false) {
-						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
-						return;
-					}	
-				}
-				break;
 			case "isMuted":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
 					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=mute");
