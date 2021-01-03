@@ -1165,7 +1165,7 @@
 			
 			// Prüfen ob gemuted ist	
 			If ($this->GetValue("isMuted") <> intval($data->muted)) {
-				$this->SetValue("isMuted", intval($data->muted);
+				$this->SetValue("isMuted", intval($data->muted));
 			}	
 			
 			
