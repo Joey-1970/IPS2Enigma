@@ -770,6 +770,14 @@
 				$this->SendDebug("SentRCCommand", "Fehler beim bei der Ausfuehrung!", 0);
 				return;
 			}
+			else {
+				If ((String)$xmlResult->e2remotecontrol->e2result == "True") {
+					$this->SendDebug("SentRCCommand", "Befehl erfolgreich gesendet", 0);
+				}
+				else {
+					$this->SendDebug("SentRCCommand", (String)$xmlResult->e2remotecontrol->e2resulttext, 0);
+				}
+			}
 		}
 	}
 	    
