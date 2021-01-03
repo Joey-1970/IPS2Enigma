@@ -893,7 +893,9 @@
 					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
 					$table .= '<th class="tg-kv4b">Beginn<br></th>';
 					$table .= '<th class="tg-kv4b">Titel</th>';
-					$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+					If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+						$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+					}
 					$table .= '<th class="tg-kv4b">Dauer<br></th>';
 					$table .= '<colgroup>'; 
 					$table .= '<col width="120">'; 
@@ -904,7 +906,9 @@
 					$table .= '<td class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[0]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[0]->e2eventservicename.'></td>';
 					$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[0]->e2eventstart).' Uhr'.'</td>';
 					$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventtitle).'</td>';
-					$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventdescription).'</td>';			
+					If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+						$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventdescription).'</td>';
+					}
 					$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[0]->e2eventduration / 60).' min'.'</td>';
 					$table .= '</tr>';
 					for ($i = 1; $i <= Min(count($xmlResult) - 1, 15); $i++) {
@@ -913,7 +917,9 @@
 						//$table .= '<td rowspan='.$ValueCount.' class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[$i]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[$i]->e2eventservicename.'></td>';
 						$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
 						$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
-						$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';			
+						If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+							$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';
+						}
 						$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
 						$table .= '</tr>';				
 					}
