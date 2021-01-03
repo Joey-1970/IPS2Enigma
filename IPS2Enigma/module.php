@@ -29,6 +29,7 @@
 		$this->RegisterPropertyInteger("EPGUpdate", 60);
 		$this->RegisterPropertyBoolean("EPGlist_Data", false);
 		$this->RegisterPropertyBoolean("EPGlist_Data_ShowShortDiscription", true);
+		$this->RegisterPropertyBoolean("EPGlist_Data_ShowMediaPlayer", true);
 		$this->RegisterPropertyBoolean("EPGlistSRef_Data", false);
 		$this->RegisterPropertyInteger("PiconSource", 0);
 		$this->RegisterPropertyBoolean("PiconUpdate", true);
@@ -120,15 +121,13 @@
 		}
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnow_Data", "caption" => "EPG des aktuellen Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnext_Data", "caption" => "EPG des folgenden Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)");
-		
-		$ArrayRowLayout = array();
-		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
-		$ArrayRowLayout[] = array("type" => "CheckBox", "name" => "EPGlist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
-		$arrayElements[] = array("type" => "RowLayout", "items" => $ArrayRowLayout);
-		
-		//$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
-		
+				
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data", "caption" => "EPG des aktuellen und der folgenden Programms des aktuellen Senders anzeigen (HTML)");		
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
+		$arrayElements[] = array("type" => "Label", "caption" => "Optionen zu Daten der Darstellung");		
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data_ShowMediaPlayer", "caption" => "Link zur Wiedergabe im Media Player anzeigen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Movielist_Data", "caption" => "Liste der Aufzeichnungen anzeigen (HTML)");
 		$arrayElements[] = array("type" => "Label", "caption" => "Optionen zu Daten der Aufzeichnungen");
@@ -1067,7 +1066,7 @@
 			}
 			else {
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) OR ($this->ReadPropertyBoolean("EPGnext_Data") == true)) {
-					SetValueString($this->GetIDForIdent("e2epgHTML"), "nicht verfügbar");
+					SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
 				}
 				If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) ) {
 					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), "nicht verfügbar");
@@ -1322,7 +1321,9 @@
 		}
 		$table .= '<th class="tg-kv4b">Dauer<br></th>';
 		$table .= '<th class="tg-kv4b"></th>';
-		$table .= '<th class="tg-kv4b"></th>';
+		If ($this->ReadPropertyBoolean("EPGlist_Data_ShowMediaPlayer") == true) {
+			$table .= '<th class="tg-kv4b"></th>';
+		}
 		$table .= '<colgroup>'; 
 		$table .= '<col width="120">'; 
 		$table .= '<col width="100">'; 
@@ -1350,7 +1351,9 @@
 			$table .= '<td class="tg-611x"><img src='.$FilePathPlay.' alt="Umschalten" 
 				onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
 			$Targetlink = "http://".$this->ReadPropertyString("IPAddress")."/web/stream.m3u?ref=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicereference)."&name=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicename);
-			$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowMediaPlayer") == true) {
+				$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+			}
 			$table .= '</tr>';
 		}
 		$table .= '</table>';
