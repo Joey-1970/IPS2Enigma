@@ -1151,13 +1151,21 @@
 			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) <> GetValueBoolean($this->GetIDForIdent("powerstate")) ) {
 				SetValueBoolean($this->GetIDForIdent("powerstate"), !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
 			}
+			
 			// Prüfen ob eine Aufnahme läuft
-			If (filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN) <> GetValueBoolean($this->GetIDForIdent("isRecording")) ) {
-				SetValueBoolean($this->GetIDForIdent("isRecording"), filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN));
+			If (filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("isRecording") ) {
+				$this->SetValue("isRecording", intval(filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN)) );
+				
 				If ($this->ReadPropertyBoolean("Movielist_Data") == true) {
 					$this->GetMovieListUpdate();
 				}
 			}
+			
+			// Prüfen ob gemuted ist
+			If (filter_var($data->muted, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("isMuted") ) {
+				$this->SetValue("isMuted", intval(filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN)) );
+			}
+			
 			// Lautstärke
 			If (intval($data->volume) <> $this->GetValue("volume") ) {
 				$this->SetValue("volume", intval($data->volume));
