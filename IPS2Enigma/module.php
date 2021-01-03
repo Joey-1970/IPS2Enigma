@@ -719,7 +719,7 @@
     		If ($Content === false) {
 			$this->SendDebug("GetContent", "Fehler bei der Datenermittlung", 0);
         		$this->SetStatus(202);
-			return $Result;
+			return false;
     		}
     		else {
         		If ($this->isXML($Content) == true) {
@@ -759,7 +759,19 @@
 		$this->SendDebug("isXML", "XML mit Fehlern: ".$message, 0);
 	return false;
 	}    
-	    
+	
+	public function SentRCCommand(int $Key)
+	{
+		// $Key nummerisch einschränken
+		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=".$Key);
+			// $Command hat einen echten Rückgabewert
+			If ($xmlResult === false) {
+				$this->SendDebug("SentRCCommand", "Fehler beim bei der Ausfuehrung!", 0);
+				return;
+			}
+		}
+	}
 	    
 	public function Get_DataUpdate()
 	{
