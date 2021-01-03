@@ -758,15 +758,16 @@
 			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=".$Key);
 			// $Command hat einen echten Rückgabewert
 			If ($xmlResult === false) {
-				$this->SendDebug("SentRCCommand", "Fehler beim bei der Ausfuehrung!", 0);
+				$this->SendDebug("SentRCCommand", "Fehler bei der Ausfuehrung!", 0);
 				return;
 			}
 			else {
-				If ((String)$xmlResult->e2remotecontrol->e2result == "True") {
+				$this->SendDebug("SentRCCommand", (String)$xmlResult->e2result, 0);
+				If ((String)$xmlResult->e2result == "True") {
 					$this->SendDebug("SentRCCommand", "Befehl erfolgreich gesendet", 0);
 				}
 				else {
-					$this->SendDebug("SentRCCommand", (String)$xmlResult->e2remotecontrol->e2resulttext, 0);
+					$this->SendDebug("SentRCCommand", (String)$xmlResult->e2resulttext, 0);
 				}
 			}
 		}
