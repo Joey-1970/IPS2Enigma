@@ -1163,11 +1163,11 @@
 				}
 			}
 			
-			$this->SendDebug("GetStatusInfo", "Mute: ".$data->muted, 0);
-			// Prüfen ob gemuted ist
-			If (filter_var($data->muted, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("isMuted") ) {
-				$this->SetValue("isMuted", intval(filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN)) );
-			}
+			// Prüfen ob gemuted ist	
+			If ($this->GetValue("isMuted") <> intval($data->muted)) {
+				$this->SetValue("isMuted", intval($data->muted);
+			}	
+			
 			
 			// Lautstärke
 			If (intval($data->volume) <> $this->GetValue("volume") ) {
