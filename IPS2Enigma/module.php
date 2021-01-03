@@ -31,6 +31,7 @@
 		$this->RegisterPropertyBoolean("EPGlist_Data_ShowShortDiscription", true);
 		$this->RegisterPropertyBoolean("EPGlist_Data_ShowMediaPlayer", true);
 		$this->RegisterPropertyBoolean("EPGlistSRef_Data", false);
+		$this->RegisterPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription", true);
 		$this->RegisterPropertyInteger("PiconSource", 0);
 		$this->RegisterPropertyBoolean("PiconUpdate", true);
 		$this->RegisterPropertyInteger("ScreenshotUpdate", 30);
@@ -122,7 +123,10 @@
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnow_Data", "caption" => "EPG des aktuellen Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGnext_Data", "caption" => "EPG des folgenden Programms des aktuellen Senders anzeigen (einzelne Variablen/HTML)");
 				
+		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data", "caption" => "EPG des aktuellen und der folgenden Programms des aktuellen Senders anzeigen (HTML)");		
+		$arrayElements[] = array("type" => "Label", "caption" => "Optionen zu Daten der Darstellung");	
+		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlistSRef_Data_ShowShortDiscription", "caption" => "Kurzbeschreibung anzeigen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "EPGlist_Data", "caption" => "EPG des aktuellen und der folgenden Programms aller Sender anzeigen (HTML)");
 		$arrayElements[] = array("type" => "Label", "caption" => "Optionen zu Daten der Darstellung");		
