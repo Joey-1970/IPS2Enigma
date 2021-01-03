@@ -778,8 +778,6 @@
 			$this->SendDebug("Get_DataUpdate", "Ausfuehrung", 0);
 			$this->SetBuffer("FirstUpdate", "false");
 			// das aktuelle Programm
-			
-			//$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/subservices"));
 			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
        			If ($xmlResult === false) {
 				$this->SendDebug("Get_DataUpdate", "Fehler beim Lesen der aktuellen Programm-Daten!", 0);
@@ -801,7 +799,6 @@
 					$this->SendDebug("Get_DataUpdate", "Fehler beim Lesen der HDD-Daten!", 0);
 					return;
 				}
-				//$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/about"));
 				
 				If (substr($xmlResult->e2about->e2hddinfo->capacity, -2) == "GB") {
 					SetValueInteger($this->GetIDForIdent("e2hddinfo_capacity"), (int)$xmlResult->e2about->e2hddinfo->capacity);
@@ -1157,8 +1154,8 @@
 				}
 			}
 			// Lautstärke
-			If (intval($data->volume) <> GetValueInteger($this->GetIDForIdent("volume")) ) {
-				SetValueInteger($this->GetIDForIdent("volume"), intval($data->volume));
+			If (intval($data->volume) <> $this->GetValue("volume") ) {
+				$this->SetValue("volume", intval($data->volume));
 			}
 			
 			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) == true) {
