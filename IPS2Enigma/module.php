@@ -1073,7 +1073,7 @@
 					SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
 				}
 				If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) ) {
-					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), "nicht verfügbar");
+					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), "N/A");
 				}
 			}
 		}
