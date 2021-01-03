@@ -49,19 +49,24 @@
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 0, "+", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 1, "-", "Shutter", -1);
 		
+		$this->RegisterProfileInteger("Enigma.YesNo", "Switch", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("Enigma.YesNo", 0, "Nein", "Switch", -1);
+		IPS_SetVariableProfileAssociation("Enigma.YesNo", 1, "Ja", "Switch", -1);
+		
 		// Status-Variablen anlegen
 		$this->RegisterVariableString("e2devicename", "Model", "", 60);
 		$this->RegisterVariableString("e2tunerinfo", "Tuner Information", "~HTMLBox", 65);
 		
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
-		$this->RegisterVariableBoolean("isRecording", "Aufnahme", "~Switch", 104);
+		$this->RegisterVariableInteger("isRecording", "Aufnahme", "Enigma.YesNo", 104);
 		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
 		$this->EnableAction("Channel_UpDown");	
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
 		$this->EnableAction("volume");
 		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
 		$this->EnableAction("volume_UpDown");	
+		$this->RegisterVariableInteger("isMuted", "Mute", "Enigma.YesNo", 108);
 		
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
 		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
