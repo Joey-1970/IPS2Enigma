@@ -49,9 +49,9 @@
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 0, "+", "Shutter", -1);
 		IPS_SetVariableProfileAssociation("Enigma.UpDown", 1, "-", "Shutter", -1);
 		
-		$this->RegisterProfileInteger("Enigma.YesNo", "Switch", "", "", 0, 1, 0);
-		IPS_SetVariableProfileAssociation("Enigma.YesNo", 0, "Nein", "Switch", -1);
-		IPS_SetVariableProfileAssociation("Enigma.YesNo", 1, "Ja", "Switch", -1);
+		$this->RegisterProfileInteger("Enigma.YesNo", "Power", "", "", 0, 1, 0);
+		IPS_SetVariableProfileAssociation("Enigma.YesNo", 0, "Nein", "Power", -1);
+		IPS_SetVariableProfileAssociation("Enigma.YesNo", 1, "Ja", "Power", -1);
 		
 		// Status-Variablen anlegen
 		$this->RegisterVariableString("e2devicename", "Model", "", 60);
@@ -378,6 +378,14 @@
 						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 						return;
 					}	
+				}
+				break;
+			case "isRecording":
+				If ($Value == 1) {
+					$this->SentRCCommand(167);
+				}
+				else {
+					$this->SentRCCommand(128);
 				}
 				break;
 			case "volume":
@@ -1145,6 +1153,7 @@
 				SetValueBoolean($this->GetIDForIdent("powerstate"), !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
 			}
 			
+			$this->SendDebug("GetStatusInfo", "Recording: ".$data->isRecording, 0);
 			// Prüfen ob eine Aufnahme läuft
 			If (filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("isRecording") ) {
 				$this->SetValue("isRecording", intval(filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN)) );
@@ -1154,6 +1163,7 @@
 				}
 			}
 			
+			$this->SendDebug("GetStatusInfo", "Mute: ".$data->muted, 0);
 			// Prüfen ob gemuted ist
 			If (filter_var($data->muted, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("isMuted") ) {
 				$this->SetValue("isMuted", intval(filter_var($data->isRecording, FILTER_VALIDATE_BOOLEAN)) );
