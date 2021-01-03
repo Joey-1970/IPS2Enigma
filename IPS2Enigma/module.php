@@ -60,6 +60,7 @@
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
 		$this->RegisterVariableInteger("isRecording", "Aufnahme", "Enigma.YesNo", 104);
+		$this->EnableAction("isRecording");			
 		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
 		$this->EnableAction("Channel_UpDown");	
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
@@ -67,6 +68,7 @@
 		$this->RegisterVariableInteger("volume_UpDown", "Volume", "Enigma.UpDown", 107);
 		$this->EnableAction("volume_UpDown");	
 		$this->RegisterVariableInteger("isMuted", "Mute", "Enigma.YesNo", 108);
+		$this->EnableAction("isMuted");
 		
 		$this->RegisterVariableString("currservice_serviceref", "Service-Referenz", "", 108);
 		$this->RegisterVariableString("e2servicename", "Service Name", "", 110);
@@ -369,15 +371,8 @@
 	public function RequestAction($Ident, $Value) 
 	{
   		switch($Ident) {
-			case "rc_mute":
-				// 113 Key "mute"
-				$this->SetValue($Ident, true);
-				$this->SentRCCommand(113);
-				$this->SetValue($Ident, false);
-				break;
 			case "muted":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
-					// 113 Key "mute"
 					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=mute");
 					If ($xmlResult === false) {
 						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
@@ -385,17 +380,14 @@
 					}	
 				}
 				break;
-			case "rc_vol_up":
-			    	// 115 Key "volume up"
-				$this->SetValue($Ident, true);
-				$this->SentRCCommand(115);
-				$this->SetValue($Ident, false);
-				break;
-			case "rc_vol_down":
-			    	// 114 Key "volume down"
-				$this->SetValue($Ident, true);
-				$this->SentRCCommand(115);
-				$this->SetValue($Ident, false);
+			case "isMuted":
+			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
+					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/vol?set=mute");
+					If ($xmlResult === false) {
+						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
+						return;
+					}	
+				}
 				break;
 			case "volume":
 			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->Get_Powerstate() == true)) {
@@ -430,20 +422,19 @@
 					$this->SetValue($Ident, $Value);
 					If ($Value == 0) {
 						// 106 Key "right"
-						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=106");
-						If ($xmlResult === false) {
-							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
-							return;
-						}
+						$this->SentRCCommand(106);
 					}
 					else {
 						// 105 Key "left"
-						$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=105");
-						If ($xmlResult === false) {
-							$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
-							return;
-						}
+						$this->SentRCCommand(105);
 					}
+				}
+				break;
+			case "powerstate":
+			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
+					// 116 Key "Power""
+					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=116"));
+					$this->Get_EPGUpdate();
 				}
 				break;
 			case "rc_power":
@@ -452,12 +443,23 @@
 				$this->SentRCCommand(116);
 				$this->SetValue($Ident, false);				
 				break;
-			case "powerstate":
-			    	If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-					// 116 Key "Power""
-					$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/remotecontrol?command=116"));
-					$this->Get_EPGUpdate();
-				}
+			case "rc_vol_up":
+			    	// 115 Key "volume up"
+				$this->SetValue($Ident, true);
+				$this->SentRCCommand(115);
+				$this->SetValue($Ident, false);
+				break;
+			case "rc_vol_down":
+			    	// 114 Key "volume down"
+				$this->SetValue($Ident, true);
+				$this->SentRCCommand(115);
+				$this->SetValue($Ident, false);
+				break;
+			case "rc_mute":
+				// 113 Key "mute"
+				$this->SetValue($Ident, true);
+				$this->SentRCCommand(113);
+				$this->SetValue($Ident, false);
 				break;
 			case "rc_1":
 				// 2   Key "1"
