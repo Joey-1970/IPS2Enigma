@@ -59,8 +59,7 @@
 		
 		$this->RegisterVariableBoolean("powerstate", "Powerstate", "~Switch", 100);
 		$this->EnableAction("powerstate");
-		$this->RegisterVariableInteger("isRecording", "Aufnahme", "Enigma.YesNo", 104);
-		$this->EnableAction("isRecording");			
+		$this->RegisterVariableInteger("isRecording", "Aufnahme", "Enigma.YesNo", 104);	
 		$this->RegisterVariableInteger("Channel_UpDown", "Channel", "Enigma.UpDown", 105);
 		$this->EnableAction("Channel_UpDown");	
 		$this->RegisterVariableInteger("volume", "Volume", "Enigma.Volume", 106);
@@ -378,14 +377,6 @@
 						$this->SendDebug("Get_DataUpdate", "Fehler beim Setzen der Lautstaerke!", 0);
 						return;
 					}	
-				}
-				break;
-			case "isRecording":
-				If ($Value == 1) {
-					$this->SentRCCommand(167);
-				}
-				else {
-					$this->SentRCCommand(128);
 				}
 				break;
 			case "volume":
