@@ -859,19 +859,11 @@
 			}
 			$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
 			
-			
-			If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
-				// Gesamtliste aller Sender 
-				$this->GetEPGNowNextData();
-			}
-			
-			If ($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) {
-				// Programm des aktuellen Senders
-				$this->GetEPGNowNextDataSRef();
-			}
+			// Gesamtliste aller Sender 
+			$this->GetEPGNowNextData();
 
-				
-			
+			// Programm des aktuellen Senders
+			$this->GetEPGNowNextDataSRef();
 			
 			If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
 				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
@@ -882,64 +874,6 @@
 				
 				$e2servicereference = (string)$xmlResult->e2service->e2servicereference;
 				$e2servicename = (string)$xmlResult->e2service->e2servicename;
-				
-				/*
-				If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) ) {
-					//$sender = urlencode($sender);
-					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgservice?sRef=".$e2servicereference);
-					If ($xmlResult === false) {
-						$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
-						return;
-					}
-					
-					If ($xmlResult->count() == 0) {
-						$this->SendDebug("Get_EPGUpdate", "Keine EPG-Daten vorhanden", 0);
-						$this->SetValue("e2epglistSRefHTML", "N/A");
-						return;
-					}
-					
-					$table = '<style type="text/css">';
-					$table .= '<link rel="stylesheet" href="./.../webfront.css">';
-					$table .= "</style>";
-					$table .= '<table class="tg">';
-					$table .= "<tr>";
-					$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
-					$table .= '<th class="tg-kv4b">Beginn<br></th>';
-					$table .= '<th class="tg-kv4b">Titel</th>';
-					If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
-						$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
-					}
-					$table .= '<th class="tg-kv4b">Dauer<br></th>';
-					$table .= '<colgroup>'; 
-					$table .= '<col width="120">'; 
-					$table .= '<col width="100">'; 
-					$table .= '</colgroup>';
-					$table .= '</tr>';
-					$table .= '<tr>';
-					$table .= '<td class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[0]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[0]->e2eventservicename.'></td>';
-					$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[0]->e2eventstart).' Uhr'.'</td>';
-					$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventtitle).'</td>';
-					If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
-						$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventdescription).'</td>';
-					}
-					$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[0]->e2eventduration / 60).' min'.'</td>';
-					$table .= '</tr>';
-					for ($i = 1; $i <= Min(count($xmlResult) - 1, 15); $i++) {
-						$table .= '<tr>';
-						$table .= '<td class="tg-611x"></td>';
-						//$table .= '<td rowspan='.$ValueCount.' class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[$i]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[$i]->e2eventservicename.'></td>';
-						$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
-						$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
-						If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
-							$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';
-						}
-						$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
-						$table .= '</tr>';				
-					}
-					$table .= '</table>';
-					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), $table);
-				}
-				*/
 				
 				
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) AND ($this->ReadPropertyBoolean("EPGnext_Data") == false) AND (substr($e2servicereference, 0, 20) <> "1:0:0:0:0:0:0:0:0:0:")) {
@@ -1198,22 +1132,23 @@
 					}
 				}
 				else {
-					If (GetValueString($this->GetIDForIdent("e2servicename")) <> "unbekannt") {
-						SetValueString($this->GetIDForIdent("e2servicename"), "unbekannt");
+					If (GetValueString($this->GetIDForIdent("e2servicename")) <> "N/A") {
+						SetValueString($this->GetIDForIdent("e2servicename"), "N/A");
 					}
 				}
 				// Der aktuelle Service-Referenz
 				If (isset($data->currservice_serviceref) ) {
 					If (strval($data->currservice_serviceref) <> GetValueString($this->GetIDForIdent("currservice_serviceref")) ) {
 						SetValueString($this->GetIDForIdent("currservice_serviceref"), strval($data->currservice_serviceref));
-						If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
-							$this->GetEPGNowNextData();
-						}
+						// Liste aller Programme
+						$this->GetEPGNowNextData();
+						// Programm des aktuellen Senders
+						$this->GetEPGNowNextDataSRef();
 					}
 				}
 				else {
-					If (GetValueString($this->GetIDForIdent("currservice_serviceref")) <> "") {
-						SetValueString($this->GetIDForIdent("currservice_serviceref"), "");
+					If (GetValueString($this->GetIDForIdent("currservice_serviceref")) <> "N/A") {
+						SetValueString($this->GetIDForIdent("currservice_serviceref"), "N/A");
 					}
 				}
 				// Signalstärke
@@ -1236,12 +1171,15 @@
 						SetValueInteger($this->GetIDForIdent("e2agc"), 0);
 					}
 				}
+				/*
 				If (GetValueString($this->GetIDForIdent("e2servicename")) <> "N/A" ) {
 					SetValueString($this->GetIDForIdent("e2servicename"), "N/A");
 				}
+				
 				If (GetValueString($this->GetIDForIdent("currservice_serviceref")) <> "N/A" ) {
 					SetValueString($this->GetIDForIdent("currservice_serviceref"), "N/A");
 				}
+				*/
 			}
 			
 		}
@@ -1314,84 +1252,86 @@
 	private function GetEPGNowNextData()
 	{
 		// Erstellt eine HTML-Tabelle mit allen Sendern des ausgewählten Bouquets mit der jeweils aktuellen und der darauf folgenden Sendung
-		$this->SendDebug("GetEPGNowNextData", "Ausfuehrung", 0);
-		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
-		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
-		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
-		If ($xmlResult === false) {
-			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der Service-Referenz!", 0);
-			$this->SetValue("e2epglistHTML", "N/A");
-			return;
-		}
-		$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
-		$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgnownext?bRef=".urlencode($bouquet));
-		If ($xmlResult === false) {
-			$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der EPG-Daten!", 0);
-			$this->SetValue("e2epglistHTML", "N/A");
-			return;
-		}
-		If ($xmlResult->count() == 0) {
-			$this->SendDebug("GetEPGNowNextData", "Keine EPG-Daten vorhanden", 0);
-			$this->SetValue("e2epglistHTML", "N/A");
-			return;
-		}
-		$table = '<style type="text/css">';
-		$table .= '<link rel="stylesheet" href="./.../webfront.css">';
-		$table .= "</style>";
-		$table .= '<table class="tg">';
-		$table .= "<tr>";
-		$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
-		$table .= '<th class="tg-kv4b">Beginn<br></th>';
-		$table .= '<th class="tg-kv4b">Titel</th>';
-		If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
-			$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
-		}
-		$table .= '<th class="tg-kv4b">Dauer<br></th>';
-		$table .= '<th class="tg-kv4b"></th>';
-		If ($this->ReadPropertyBoolean("EPGlist_Data_ShowMediaPlayer") == true) {
+		If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
+			$this->SendDebug("GetEPGNowNextData", "Ausfuehrung", 0);
+			$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
+			$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
+			If ($xmlResult === false) {
+				$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der Service-Referenz!", 0);
+				$this->SetValue("e2epglistHTML", "N/A");
+				return;
+			}
+			$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgnownext?bRef=".urlencode($bouquet));
+			If ($xmlResult === false) {
+				$this->SendDebug("GetEPGNowNextData", "Fehler beim Lesen der EPG-Daten!", 0);
+				$this->SetValue("e2epglistHTML", "N/A");
+				return;
+			}
+			If ($xmlResult->count() == 0) {
+				$this->SendDebug("GetEPGNowNextData", "Keine EPG-Daten vorhanden", 0);
+				$this->SetValue("e2epglistHTML", "N/A");
+				return;
+			}
+			$table = '<style type="text/css">';
+			$table .= '<link rel="stylesheet" href="./.../webfront.css">';
+			$table .= "</style>";
+			$table .= '<table class="tg">';
+			$table .= "<tr>";
+			$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
+			$table .= '<th class="tg-kv4b">Beginn<br></th>';
+			$table .= '<th class="tg-kv4b">Titel</th>';
+			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
+				$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+			}
+			$table .= '<th class="tg-kv4b">Dauer<br></th>';
 			$table .= '<th class="tg-kv4b"></th>';
-		}
-		$table .= '<colgroup>'; 
-		$table .= '<col width="120">'; 
-		$table .= '<col width="100">'; 
-		$table .= '</colgroup>';
-		$table .= '</tr>';
-		for ($i = 0; $i <= count($xmlResult) - 1; $i=$i+2) {
-			$Servicereference = (string)$xmlResult->e2event[$i]->e2eventservicereference;
-			$table .= '<tr>';
-			$table .= '<td rowspan="2" class="tg-611x"><img src='.$this->Get_Filename($Servicereference).' alt='.(string)$xmlResult->e2event[$i]->e2eventservicename.' 
-				onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
-			$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
-			$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
-			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
-				$table .= '<td class="tg-611x" onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_D\' })">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';			
-			}
-			$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
-			$table .= '</tr>';
-			$table .= '<tr>';
-			$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i+1]->e2eventstart).' Uhr'.'</td>';
-			$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i+1]->e2eventtitle).'</td>';
-			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
-				$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i+1]->e2eventdescription).'</td>';
-			}
-			$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i+1]->e2eventduration / 60).' min'.'</td>';
-			$table .= '<td class="tg-611x"><img src='.$FilePathPlay.' alt="Umschalten" 
-				onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
-			$Targetlink = "http://".$this->ReadPropertyString("IPAddress")."/web/stream.m3u?ref=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicereference)."&name=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicename);
 			If ($this->ReadPropertyBoolean("EPGlist_Data_ShowMediaPlayer") == true) {
-				$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+				$table .= '<th class="tg-kv4b"></th>';
 			}
+			$table .= '<colgroup>'; 
+			$table .= '<col width="120">'; 
+			$table .= '<col width="100">'; 
+			$table .= '</colgroup>';
 			$table .= '</tr>';
+			for ($i = 0; $i <= count($xmlResult) - 1; $i=$i+2) {
+				$Servicereference = (string)$xmlResult->e2event[$i]->e2eventservicereference;
+				$table .= '<tr>';
+				$table .= '<td rowspan="2" class="tg-611x"><img src='.$this->Get_Filename($Servicereference).' alt='.(string)$xmlResult->e2event[$i]->e2eventservicename.' 
+					onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
+				$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
+				$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
+				If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
+					$table .= '<td class="tg-611x" onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_D\' })">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';			
+				}
+				$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
+				$table .= '</tr>';
+				$table .= '<tr>';
+				$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i+1]->e2eventstart).' Uhr'.'</td>';
+				$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i+1]->e2eventtitle).'</td>';
+				If ($this->ReadPropertyBoolean("EPGlist_Data_ShowShortDiscription") == true) {
+					$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i+1]->e2eventdescription).'</td>';
+				}
+				$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i+1]->e2eventduration / 60).' min'.'</td>';
+				$table .= '<td class="tg-611x"><img src='.$FilePathPlay.' alt="Umschalten" 
+					onclick="window.xhrGet=function xhrGet(o) {var HTTP = new XMLHttpRequest();HTTP.open(\'GET\',o.url,true);HTTP.send();};window.xhrGet({ url: \'hook/IPS2Enigma?Index='.($i/2).'&Source=EPGlist_Data_A&SRef='.$Servicereference.'\' })"></td>';
+				$Targetlink = "http://".$this->ReadPropertyString("IPAddress")."/web/stream.m3u?ref=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicereference)."&name=".urlencode((string)$xmlResult->e2event[$i]->e2eventservicename);
+				If ($this->ReadPropertyBoolean("EPGlist_Data_ShowMediaPlayer") == true) {
+					$table .= '<td class="tg-611x"><a href='.$Targetlink.' target="_blank"><img src='.$FilePathStream.' alt="Stream starten"></td>';
+				}
+				$table .= '</tr>';
+			}
+			$table .= '</table>';
+			$this->SetValue("e2epglistHTML", $table);
 		}
-		$table .= '</table>';
-		$this->SetValue("e2epglistHTML", $table);
 	}
 	
 	private function GetEPGNowNextDataSRef()   
 	{
 		// Erstellt eine HTML-Tabelle mit der aktuellen und den darauf folgenden Sendungen eines bestimmten Senders 
-		$this->SendDebug("GetEPGNowNextDataSRef", "Ausfuehrung", 0);
-		If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
+		If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) AND (GetValueBoolean($this->GetIDForIdent("powerstate")) == true)) {
+			$this->SendDebug("GetEPGNowNextDataSRef", "Ausfuehrung", 0);
 			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
 			If ($xmlResult === false) {
 				$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
