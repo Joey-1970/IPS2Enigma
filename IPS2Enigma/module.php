@@ -1103,8 +1103,11 @@
 			}
 			$data = json_decode($JSONString);
 			// Prüfen ob die Box ein- oder ausgeschaltet ist
-			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) <> GetValueBoolean($this->GetIDForIdent("powerstate")) ) {
-				SetValueBoolean($this->GetIDForIdent("powerstate"), !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
+			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("powerstate") ) {
+				$this->SetValue("powerstate", !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
+				If ($this->GetValue("powerstate") == false) {
+					$this->SetValue("e2servicename", "N/A");
+				}
 			}
 			
 			$this->SendDebug("GetStatusInfo", "Recording: ".$data->isRecording, 0);
@@ -1137,8 +1140,8 @@
 					}
 				}
 				else {
-					If (GetValueString($this->GetIDForIdent("e2servicename")) <> "N/A") {
-						SetValueString($this->GetIDForIdent("e2servicename"), "N/A");
+					If ($this->GetValue("e2servicename") <> "N/A") {
+						$this->SetValue("e2servicename", "N/A");
 					}
 				}
 				// Der aktuelle Service-Referenz
