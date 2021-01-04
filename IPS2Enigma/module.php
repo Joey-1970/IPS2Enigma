@@ -1140,10 +1140,10 @@
 				If (isset($data->currservice_serviceref) ) {
 					If (strval($data->currservice_serviceref) <> GetValueString($this->GetIDForIdent("currservice_serviceref")) ) {
 						SetValueString($this->GetIDForIdent("currservice_serviceref"), strval($data->currservice_serviceref));
-						// Liste aller Programme
-						$this->GetEPGNowNextData();
 						// Programm des aktuellen Senders
 						$this->GetEPGNowNextDataSRef();
+						// Liste aller Programme
+						$this->GetEPGNowNextData();
 					}
 				}
 				else {
