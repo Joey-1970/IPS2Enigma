@@ -859,9 +859,19 @@
 			}
 			$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
 			
+			
 			If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
+				// Gesamtliste aller Sender 
 				$this->GetEPGNowNextData();
 			}
+			
+			If ($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) {
+				// Programm des aktuellen Senders
+				$this->GetEPGNowNextDataSRef();
+			}
+
+				
+			
 			
 			If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
 				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
@@ -873,6 +883,7 @@
 				$e2servicereference = (string)$xmlResult->e2service->e2servicereference;
 				$e2servicename = (string)$xmlResult->e2service->e2servicename;
 				
+				/*
 				If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) ) {
 					//$sender = urlencode($sender);
 					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgservice?sRef=".$e2servicereference);
@@ -928,7 +939,9 @@
 					$table .= '</table>';
 					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), $table);
 				}
-			
+				*/
+				
+				
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) AND ($this->ReadPropertyBoolean("EPGnext_Data") == false) AND (substr($e2servicereference, 0, 20) <> "1:0:0:0:0:0:0:0:0:0:")) {
 					// das aktuelle Ereignis
 					$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenow?sRef=".$e2servicereference);
@@ -1236,6 +1249,7 @@
 	
 	private function GetMovieListUpdate()
 	{
+		// Erstellt eine HTML-Tabelle mit allen Aufzeichnungen
 		$this->SendDebug("GetMovieListUpdate", "Ausfuehrung", 0);
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
@@ -1299,6 +1313,7 @@
 	    
 	private function GetEPGNowNextData()
 	{
+		// Erstellt eine HTML-Tabelle mit allen Sendern des ausgewählten Bouquets mit der jeweils aktuellen und der darauf folgenden Sendung
 		$this->SendDebug("GetEPGNowNextData", "Ausfuehrung", 0);
 		$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
 		$FilePathPlay = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Play_32.png";
@@ -1372,6 +1387,74 @@
 		$this->SetValue("e2epglistHTML", $table);
 	}
 	
+	private function GetEPGNowNextDataSRef()   
+	{
+		// Erstellt eine HTML-Tabelle mit der aktuellen und den darauf folgenden Sendungen eines bestimmten Senders 
+		$this->SendDebug("GetEPGNowNextDataSRef", "Ausfuehrung", 0);
+		If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
+			If ($xmlResult === false) {
+				$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+				return;
+			}
+
+			$e2servicereference = (string)$xmlResult->e2service->e2servicereference;
+			$e2servicename = (string)$xmlResult->e2service->e2servicename;
+
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgservice?sRef=".$e2servicereference);
+			If ($xmlResult === false) {
+				$this->SendDebug("Get_EPGUpdate", "Fehler beim Lesen der EPG-Daten!", 0);
+				return;
+			}
+
+			If ($xmlResult->count() == 0) {
+				$this->SendDebug("Get_EPGUpdate", "Keine EPG-Daten vorhanden", 0);
+				$this->SetValue("e2epglistSRefHTML", "N/A");
+				return;
+			}
+
+			$table = '<style type="text/css">';
+			$table .= '<link rel="stylesheet" href="./.../webfront.css">';
+			$table .= "</style>";
+			$table .= '<table class="tg">';
+			$table .= "<tr>";
+			$table .= '<th class="tg-kv4b" align="left" width=150 >Sender</th>';
+			$table .= '<th class="tg-kv4b">Beginn<br></th>';
+			$table .= '<th class="tg-kv4b">Titel</th>';
+			If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+				$table .= '<th class="tg-kv4b">Kurzbeschreibung<br></th>';
+			}
+			$table .= '<th class="tg-kv4b">Dauer<br></th>';
+			$table .= '<colgroup>'; 
+			$table .= '<col width="120">'; 
+			$table .= '<col width="100">'; 
+			$table .= '</colgroup>';
+			$table .= '</tr>';
+			$table .= '<tr>';
+			$table .= '<td class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[0]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[0]->e2eventservicename.'></td>';
+			$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[0]->e2eventstart).' Uhr'.'</td>';
+			$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventtitle).'</td>';
+			If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+				$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[0]->e2eventdescription).'</td>';
+			}
+			$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[0]->e2eventduration / 60).' min'.'</td>';
+			$table .= '</tr>';
+			for ($i = 1; $i <= Min(count($xmlResult) - 1, 15); $i++) {
+				$table .= '<tr>';
+				$table .= '<td class="tg-611x"></td>';
+				//$table .= '<td rowspan='.$ValueCount.' class="tg-611x"><img src='.$this->Get_Filename((string)$xmlResult->e2event[$i]->e2eventservicereference).' alt='.(string)$xmlResult->e2event[$i]->e2eventservicename.'></td>';
+				$table .= '<td class="tg-611x">'.date("H:i", (int)$xmlResult->e2event[$i]->e2eventstart).' Uhr'.'</td>';
+				$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventtitle).'</td>';
+				If ($this->ReadPropertyBoolean("EPGlistSRef_Data_ShowShortDiscription") == true) {
+					$table .= '<td class="tg-611x">'.utf8_decode($xmlResult->e2event[$i]->e2eventdescription).'</td>';
+				}
+				$table .= '<td class="tg-611x">'.round((int)$xmlResult->e2event[$i]->e2eventduration / 60).' min'.'</td>';
+				$table .= '</tr>';				
+			}
+			$table .= '</table>';
+			$this->SetValue("e2epglistSRefHTML", $table);
+		}
+	}
 	    
 	private function Get_Powerstate()
 	{
