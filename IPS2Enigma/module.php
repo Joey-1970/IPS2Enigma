@@ -971,7 +971,12 @@
 					SetValueInteger($this->GetIDForIdent("e2eventduration"), round((int)$xmlResult->e2event->e2eventduration / 60) );
 					SetValueInteger($this->GetIDForIdent("e2eventpast"), round( (int)time() - (int)$xmlResult->e2event->e2eventstart) / 60 );
 					SetValueInteger($this->GetIDForIdent("e2eventleft"), round(((int)$xmlResult->e2event->e2eventstart + (int)$xmlResult->e2event->e2eventduration - (int)time()) / 60 ));
-					SetValueInteger($this->GetIDForIdent("e2eventprogress"), GetValueInteger($this->GetIDForIdent("e2eventpast")) / GetValueInteger($this->GetIDForIdent("e2eventduration")) * 100);
+					If ($this->GetValue("e2eventduration") > 0) {
+						$this->SetValue("e2eventprogress", $this->GetValue("e2eventpast") / $this->GetValue("e2eventduration") * 100);
+					}
+					else {
+						$this->SetValue("e2eventprogress", 0);
+					}
 					// das folgende Ereignis
 					$xmlResult_2 = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/epgservicenext?sRef=".$e2servicereference);
 					If ($xmlResult_2 === false) {
