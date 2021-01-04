@@ -829,7 +829,7 @@
 					SetValueInteger($this->GetIDForIdent("e2eventpast"), 0);
 					SetValueInteger($this->GetIDForIdent("e2eventleft"), 0);
 					SetValueInteger($this->GetIDForIdent("e2eventprogress"), 0);
-					SetValueString($this->GetIDForIdent("e2epgHTML"), ""); 		
+					SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A"); 		
 				}
 				If ($this->ReadPropertyBoolean("EPGnext_Data") == true) {
 					SetValueString($this->GetIDForIdent("e2nexteventtitle"), "N/A");
@@ -838,7 +838,7 @@
 					SetValueInteger($this->GetIDForIdent("e2nexteventstart"), 0);
 					SetValueInteger($this->GetIDForIdent("e2nexteventend"), 0);
 					SetValueInteger($this->GetIDForIdent("e2nexteventduration"), 0);
-					SetValueString($this->GetIDForIdent("e2epgHTML"), "");
+					SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
 				}
 				$this->SetBuffer("FirstUpdate", "true");
 			}
@@ -1107,6 +1107,12 @@
 				$this->SetValue("powerstate", !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
 				If ($this->GetValue("powerstate") == false) {
 					$this->SetValue("e2servicename", "N/A");
+				}
+				else {
+					// Programm des aktuellen Senders
+					$this->GetEPGNowNextDataSRef();
+					// Liste aller Programme
+					$this->GetEPGNowNextData();
 				}
 			}
 			
