@@ -881,10 +881,12 @@
 						return;
 					}
 					
-					$ValueCount = count($xmlResult) - 2;
-					If ($ValueCount <= 0) {
+					If ($xmlResult->count() == 0) {
+						$this->SendDebug("Get_EPGUpdate", "Keine EPG-Daten vorhanden", 0);
+						$this->SetValue("e2epglistSRefHTML", "N/A");
 						return;
 					}
+					
 					$table = '<style type="text/css">';
 					$table .= '<link rel="stylesheet" href="./.../webfront.css">';
 					$table .= "</style>";
