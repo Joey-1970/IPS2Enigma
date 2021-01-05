@@ -847,6 +847,18 @@
 	
 	public function Get_EPGUpdate()
 	{
+		// Programm des aktuellen Senders (HTML)
+		$this->GetEPGNowNextDataSRef();
+		
+		// Gesamtliste aller Sender (HTML)
+		$this->GetEPGNowNextData();
+
+		// EPG Daten (Statusvariablen / HTML)
+		$this->GetEPGBasics();
+	}
+	    
+	private function GetEPGBasics()
+	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			$this->SendDebug("Get_EPGUpdate", "Ausfuehrung", 0);
 			$FilePathStream = "user".DIRECTORY_SEPARATOR."Enigma_HTML".DIRECTORY_SEPARATOR."Button-Media-Player_32.png";
@@ -858,12 +870,6 @@
 				return;
 			}
 			$bouquet = (string)$xmlResult->e2service[$this->ReadPropertyInteger("BouquetsNumber")]->e2servicereference;
-			
-			// Gesamtliste aller Sender 
-			$this->GetEPGNowNextData();
-
-			// Programm des aktuellen Senders
-			$this->GetEPGNowNextDataSRef();
 			
 			If (GetValueBoolean($this->GetIDForIdent("powerstate")) == true) {
 				$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/subservices");
