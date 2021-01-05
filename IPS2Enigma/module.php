@@ -1036,10 +1036,7 @@
 			}
 			else {
 				If (($this->ReadPropertyBoolean("EPGnow_Data") == true) OR ($this->ReadPropertyBoolean("EPGnext_Data") == true)) {
-					SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
-				}
-				If (($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) ) {
-					SetValueString($this->GetIDForIdent("e2epglistSRefHTML"), "N/A");
+					$this->SetValue("e2epgHTML", "N/A");
 				}
 			}
 		}
