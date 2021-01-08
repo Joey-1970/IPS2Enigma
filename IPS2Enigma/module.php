@@ -95,8 +95,7 @@
 		$arrayElements[] = array("type" => "ValidationTextBox", "name" => "User", "caption" => "User");
 		$arrayElements[] = array("type" => "PasswordTextBox", "name" => "Password", "caption" => "Password");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus Daten-Update in Sekunden (0 -> aus 1 -> Minimum)");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "DataUpdate", "caption" => "Daten Update (sek)");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "DataUpdate", "caption" => "Daten-Update", "minimum" => 0, "maximum" => 3600, "suffix" => "sek");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Enigma2_Data", "caption" => "Enigma2 Daten anzeigen"); 
 		$arrayElements[] = array("type" => "CheckBox", "name" => "HDD_Data", "caption" => "HDD Daten anzeigen");
@@ -104,8 +103,7 @@
 		$arrayElements[] = array("type" => "CheckBox", "name" => "Signal_Data", "caption" => "Empfangssignal Daten anzeigen");
 		$arrayElements[] = array("type" => "CheckBox", "name" => "RC_Data", "caption" => "Virtuelle Fernbedienung erstellen");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Zyklus EPG-Update in Sekunden (0 -> aus 15 -> Minimum) (HTML)");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "EPGUpdate", "caption" => "EPG Update (sek)");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "EPGUpdate", "caption" => "EPG-Update", "minimum" => 0, "maximum" => 3600, "suffix" => "sek");
 		$arrayElements[] = array("type" => "Label", "caption" => "Bei mehreren eingerichteten Bouquets muss hier eine Vorauswahl getroffen werden.");
 		
 		$BouquetsArray = array();
@@ -147,14 +145,12 @@
 		$arrayElements[] = array("type" => "Select", "name" => "PiconSource", "caption" => "Picon Quelle", "options" => $arrayOptions );
 		$arrayElements[] = array("type" => "CheckBox", "name" => "PiconUpdate", "caption" => "Picon Update bei jedem Neustart des Moduls");
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");
-		$arrayElements[] = array("type" => "Label", "caption" => "Screenshot-Update in Sekunden (0 -> aus, 5 sek -> Minimum)");
-		$arrayElements[] = array("type" => "IntervalBox", "name" => "ScreenshotUpdate", "caption" => "Screenshot-Update (sek)");
+		$arrayElements[] = array("type" => "NumberSpinner", "name" => "ScreenshotUpdate", "caption" => "Screenshot-Update ", "minimum" => 0, "maximum" => 3600, "suffix" => "sek");
 		$arrayOptions = array();
 		$arrayOptions[] = array("label" => "640 px", "value" => 640);
 		$arrayOptions[] = array("label" => "860 px", "value" => 860);
 		$arrayOptions[] = array("label" => "1920 px", "value" => 1920);
 		$arrayElements[] = array("type" => "Select", "name" => "Screenshot", "caption" => "Screenshot Grösse", "options" => $arrayOptions );		
-
 		$arrayElements[] = array("type" => "Label", "caption" => "_____________________________________________________________________________________________________");		
 		
 		$arrayElements[] = array("type" => "Label", "caption" => "Test Center"); 
