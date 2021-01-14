@@ -1129,7 +1129,14 @@
 						SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
 					}
 					
-									
+					If ($this->ReadPropertyBoolean("EPGlist_Data") == true) {
+						$this->SetValue("e2epglistHTML", "N/A");
+					}
+					
+					If ($this->ReadPropertyBoolean("EPGlistSRef_Data") == true) {
+						$this->SetValue("e2epglistSRefHTML", "N/A");
+					}
+					
 					$this->SetValue("e2servicename", "N/A");
 					
 				}
