@@ -809,9 +809,6 @@
 					SetValueInteger($this->GetIDForIdent("e2hddinfo_free"), (int)$xmlResult->e2about->e2hddinfo->free * 1000);
 				}
 			}
-			
-			//SetValueString($this->GetIDForIdent("e2stream"), "<video width="320" height="240" controls> <source src="http://".$this->ReadPropertyString("IPAddress")."/web/stream.m3u?ref=".$e2servicereference." type="video/mp4"> </video>");
-			//"http://".$this->ReadPropertyString("IPAddress")."/web/stream.m3u?ref=".$e2servicereference
 		}
 		else {
 			if ($this->GetBuffer("FirstUpdate") == "false") {
@@ -1105,13 +1102,44 @@
 			If (!filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN) <> $this->GetValue("powerstate") ) {
 				$this->SetValue("powerstate", !filter_var($data->inStandby, FILTER_VALIDATE_BOOLEAN));
 				If ($this->GetValue("powerstate") == false) {
+					// Box ist ausgeschaltet
+					$this->SetTimerInterval("DataUpdate", 0);
+					$this->SetTimerInterval("EPGUpdate", 0);
+					$this->SetTimerInterval("ScreenshotUpdate", 0);
+					
+					If ($this->ReadPropertyBoolean("EPGnow_Data") == true) {
+						SetValueString($this->GetIDForIdent("e2eventtitle"), "N/A");
+						SetValueString($this->GetIDForIdent("e2eventdescription"), "N/A");
+						SetValueString($this->GetIDForIdent("e2eventdescriptionextended"), "N/A");
+						SetValueInteger($this->GetIDForIdent("e2eventstart"), 0);
+						SetValueInteger($this->GetIDForIdent("e2eventend"), 0);
+						SetValueInteger($this->GetIDForIdent("e2eventduration"), 0);
+						SetValueInteger($this->GetIDForIdent("e2eventpast"), 0);
+						SetValueInteger($this->GetIDForIdent("e2eventleft"), 0);
+						SetValueInteger($this->GetIDForIdent("e2eventprogress"), 0);
+						SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A"); 		
+					}
+					If ($this->ReadPropertyBoolean("EPGnext_Data") == true) {
+						SetValueString($this->GetIDForIdent("e2nexteventtitle"), "N/A");
+						SetValueString($this->GetIDForIdent("e2nexteventdescription"), "N/A");
+						SetValueString($this->GetIDForIdent("e2nexteventdescriptionextended"), "N/A");
+						SetValueInteger($this->GetIDForIdent("e2nexteventstart"), 0);
+						SetValueInteger($this->GetIDForIdent("e2nexteventend"), 0);
+						SetValueInteger($this->GetIDForIdent("e2nexteventduration"), 0);
+						SetValueString($this->GetIDForIdent("e2epgHTML"), "N/A");
+					}
+					
+									
 					$this->SetValue("e2servicename", "N/A");
+					
 				}
 				else {
-					// Programm des aktuellen Senders
-					$this->GetEPGNowNextDataSRef();
-					// Liste aller Programme
-					$this->GetEPGNowNextData();
+					// Box ist eingeschaltet
+					$this->SetTimerInterval("DataUpdate", ($this->ReadPropertyInteger("DataUpdate") * 1000));
+					$this->SetTimerInterval("EPGUpdate", ($this->ReadPropertyInteger("EPGUpdate") * 1000));
+					$this->SetTimerInterval("ScreenshotUpdate", ($this->ReadPropertyInteger("ScreenshotUpdate") * 1000));
+					
+					$this->Get_EPGUpdate();
 				}
 			}
 			
