@@ -1138,7 +1138,7 @@
 					}
 					
 					$this->SetValue("e2servicename", "N/A");
-					IPS_DeleteMedia($this->GetIDForIdent("Screenshot_".$this->InstanceID), true);
+					IPS_SetMediaContent($this->GetIDForIdent("Screenshot_".$this->InstanceID), ""); 
 					IPS_SendMediaEvent($this->GetIDForIdent("Screenshot_".$this->InstanceID)); //aktualisieren
 				}
 				else {
