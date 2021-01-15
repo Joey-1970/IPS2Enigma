@@ -1138,7 +1138,7 @@
 					}
 					
 					$this->SetValue("e2servicename", "N/A");
-					
+					IPS_DeleteMedia($this->GetIDForIdent("Screenshot_".$this->InstanceID), true);
 				}
 				else {
 					// Box ist eingeschaltet
