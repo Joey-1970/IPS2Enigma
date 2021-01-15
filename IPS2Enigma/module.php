@@ -1138,8 +1138,8 @@
 					}
 					
 					$this->SetValue("e2servicename", "N/A");
-					IPS_SetMediaContent($this->GetIDForIdent("Screenshot_".$this->InstanceID), ""); 
-					IPS_SendMediaEvent($this->GetIDForIdent("Screenshot_".$this->InstanceID)); //aktualisieren
+					//IPS_SetMediaContent($this->GetIDForIdent("Screenshot_".$this->InstanceID), ""); 
+					//IPS_SendMediaEvent($this->GetIDForIdent("Screenshot_".$this->InstanceID)); //aktualisieren
 				}
 				else {
 					// Box ist eingeschaltet
