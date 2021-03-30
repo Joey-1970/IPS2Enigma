@@ -1088,12 +1088,13 @@
 		}
 	}
 	
+	    
 	public function GetStatusInfo()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
 			$this->SendDebug("GetStatusInfo", "Ausfuehrung", 0);
-			$JSONString = file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/api/statusinfo?");
-			If ($JSONString == false) {
+			$JSONString = @file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/api/statusinfo?");
+			If ($JSONString === false) {
 				$this->SendDebug("GetStatusInfo", "Fehler beim Lesen der Statusinformationen!", 0);
 				return;
 			}
