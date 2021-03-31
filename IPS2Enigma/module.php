@@ -1248,6 +1248,7 @@
 			$this->SetValue("e2movielist", "N/A");
 			return;
 		}
+		
 		If ($xmlResult->count() == 0) {
 			$this->SendDebug("GetMovieListUpdate", "Keine Aufzeichnungs-Daten vorhanden", 0);
 			$this->SetValue("e2movielist", "N/A");
@@ -1731,7 +1732,8 @@
 	public function GetServiceInformation()
 	{
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
+			//$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
 			If (count($xmlResult->e2service) == 0) {
 				$Result = "Es wurde nur kein Bouquet gefunden, bitte auf dem Receiver mindestens eines einrichten";
 			}
@@ -1753,8 +1755,8 @@
 	{
 		$Result = false;
 		If (($this->ReadPropertyBoolean("Open") == true) AND ($this->ConnectionTest() == true)) {
-			
-			$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
+			$xmlResult = $this->GetContent("http://".$this->ReadPropertyString("IPAddress")."/web/getservices");
+			//$xmlResult = new SimpleXMLElement(file_get_contents("http://".$this->ReadPropertyString("IPAddress")."/web/getservices"));
 			If ($xmlResult === false) {
 				$this->SendDebug("GetBouquetsInformation", "Fehler beim Lesen der Daten!", 0);
 				return $Result;
