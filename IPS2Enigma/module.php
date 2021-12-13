@@ -692,7 +692,7 @@
 	public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     	{
 		switch ($Message) {
-			case 10001:
+			case IPS_KERNELSTARTED:
 				$this->RegisterMediaObject("Screenshot_".$this->InstanceID, "Screenshot_".$this->InstanceID, 1, $this->InstanceID, 1000, true, "Screenshot.jpg");
 				$this->RegisterHook("/hook/IPS2Enigma");
 				break;
