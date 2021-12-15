@@ -355,14 +355,18 @@
 			If ($this->ReadPropertyBoolean("Movielist_Data") == true) {
 				$this->GetMovieListUpdate();
 			}
-			$this->SetStatus(102);
+			If ($this->GetStatus() <> 102) {
+				$this->SetStatus(102);
+			}
 		}
 		else {
 			$this->SetTimerInterval("DataUpdate", 0);
 			$this->SetTimerInterval("EPGUpdate", 0);
 			$this->SetTimerInterval("ScreenshotUpdate", 0);
 			$this->SetTimerInterval("StatusInfo", 0);
-			$this->SetStatus(104);
+			If ($this->GetStatus() <> 104) {
+				$this->SetStatus(104);
+			}
 		}
         }
 	
@@ -705,17 +709,23 @@
     		$Content = @file_get_contents($HTTP_Link);
     		If ($Content === false) {
 			$this->SendDebug("GetContent", "Fehler bei der Datenermittlung", 0);
-        		$this->SetStatus(202);
+        		If ($this->GetStatus() <> 202) {
+				$this->SetStatus(202);
+			}
 			return false;
     		}
     		else {
         		If ($this->isXML($Content) == true) {
 				$xmlResult = new SimpleXMLElement($Content);
-        			$this->SetStatus(102);
+        			If ($this->GetStatus() <> 102) {
+					$this->SetStatus(102);
+				}
 				return $xmlResult;
 			}
 			else {
-				$this->SetStatus(202);
+				If ($this->GetStatus() <> 202) {
+					$this->SetStatus(202);
+				}
 			}
     		}
 	}
@@ -1695,19 +1705,25 @@
 				if (!$status) {
 					$this->SendDebug("ConnectionTest", "Port ist geschlossen!", 0);
 					IPS_LogMessage("IPS2Enigma Netzanbindung","Port ist geschlossen!");
-					$this->SetStatus(202);
+					If ($this->GetStatus() <> 202) {
+						$this->SetStatus(202);
+					}
 	   			}
 	   			else {
 	   				fclose($status);
 					//IPS_LogMessage("IPS2Enigma Netzanbindung","Port ist geöffnet");
 					$result = true;
-					$this->SetStatus(102);
+					If ($this->GetStatus() <> 102) {
+						$this->SetStatus(102);
+					}
 	   			}
 		}
 		else {
 			$this->SendDebug("ConnectionTest", "IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!", 0);
 			IPS_LogMessage("IPS2Enigma","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
-			$this->SetStatus(202);
+			If ($this->GetStatus() <> 202) {
+				$this->SetStatus(202);
+			}
 		}
 	return $result;
 	}
