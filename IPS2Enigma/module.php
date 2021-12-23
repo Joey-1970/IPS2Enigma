@@ -1707,6 +1707,8 @@
 					IPS_LogMessage("IPS2Enigma Netzanbindung","Port ist geschlossen!");
 					If ($this->GetStatus() <> 202) {
 						$this->SetStatus(202);
+						$this->SetValue("powerstate", false);
+						$this->DisableAction("powerstate");
 					}
 	   			}
 	   			else {
@@ -1715,6 +1717,7 @@
 					$result = true;
 					If ($this->GetStatus() <> 102) {
 						$this->SetStatus(102);
+						$this->EnableAction("powerstate");
 					}
 	   			}
 		}
@@ -1723,6 +1726,8 @@
 			IPS_LogMessage("IPS2Enigma","IP ".$this->ReadPropertyString("IPAddress")." reagiert nicht!");
 			If ($this->GetStatus() <> 202) {
 				$this->SetStatus(202);
+				$this->SetValue("powerstate", false);
+				$this->DisableAction("powerstate");
 			}
 		}
 	return $result;
